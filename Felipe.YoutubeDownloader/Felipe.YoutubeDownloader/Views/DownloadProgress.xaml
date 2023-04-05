@@ -1,0 +1,92 @@
+﻿<Window
+    x:Class="Felipe.YoutubeDownloader.DownloadProgress"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Felipe.YoutubeDownloader"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Download"
+    MinWidth="300"
+    MinHeight="160"
+    Closing="Window_Closing"
+    ResizeMode="NoResize"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <DockPanel Margin="10">
+        <Grid VerticalAlignment="Center" DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Name="DownloadLabel"
+                    Grid.Column="0"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center">
+                    Starting Download...
+                </Label>
+
+                <Label
+                    Name="DownloadProgressLabel"
+                    Grid.Column="1"
+                    HorizontalContentAlignment="Right"
+                    VerticalContentAlignment="Center">
+                    0%
+                </Label>
+            </Grid>
+
+            <ProgressBar
+                x:Name="DownloadProgressBar"
+                Grid.Row="1"
+                Height="16"
+                Margin="0,8,0,8"
+                Padding="6"
+                VerticalAlignment="Center"
+                BorderThickness="1"
+                IsIndeterminate="False"
+                Maximum="1"
+                Minimum="0"
+                Visibility="Visible" />
+        </Grid>
+
+        <Grid HorizontalAlignment="Right" DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Name="OkBtn"
+                Grid.Column="0"
+                MinWidth="60"
+                Padding="6"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Click="OkBtn_Click"
+                Content="OK"
+                IsDefault="False"
+                IsEnabled="False" />
+
+            <Button
+                Name="CancelBtn"
+                Grid.Column="1"
+                MinWidth="60"
+                Margin="8,0,0,0"
+                Padding="6"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Click="CancelBtn_Click"
+                Content="Cancel"
+                IsCancel="True" />
+        </Grid>
+    </DockPanel>
+</Window>

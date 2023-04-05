@@ -1,0 +1,182 @@
+﻿<Window
+    x:Class="Felipe.YoutubeDownloader.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Felipe.YoutubeDownloader"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Youtube Downloader"
+    Width="600"
+    Height="550"
+    MinWidth="400"
+    MinHeight="550"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Click="SettingsMenuItem_Click" Header="_Settings" />
+                <Separator />
+                <MenuItem Click="ExitMenuItem_Click" Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Click="AboutMenuItem_Click" Header="_About" />
+            </MenuItem>
+        </Menu>
+        <DockPanel Margin="10">
+            <Grid DockPanel.Dock="Top">
+                <Label
+                    Margin="0,0,0,24"
+                    HorizontalAlignment="Left"
+                    Content="Youtube Downloader"
+                    FontFamily="Segoe UI Semilight"
+                    FontSize="26" />
+            </Grid>
+            <StackPanel
+                HorizontalAlignment="Stretch"
+                DockPanel.Dock="Top"
+                Orientation="Vertical">
+
+                <!--  YOUTUBE URL  -->
+                <TextBlock
+                    Height="22"
+                    Margin="0,2,0,2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Text="Video URL:"
+                    TextAlignment="Center" />
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        Name="YoutubeUrlTextBox"
+                        Padding="2,4,2,4"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontSize="12"
+                        IsEnabled="True"
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        TabIndex="2"
+                        TextAlignment="Left"
+                        TextChanged="YoutubeUrlTextBox_Changed"
+                        TextWrapping="NoWrap" />
+                </Grid>
+
+                <!--  OPTIONS  -->
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <DockPanel VerticalAlignment="Stretch">
+                            <Label
+                                Margin="0,-2,0,0"
+                                HorizontalAlignment="Left"
+                                Content="Options"
+                                FontFamily="Segoe UI Semibold Italic"
+                                FontSize="16" />
+                        </DockPanel>
+                    </Expander.Header>
+
+                    <Expander.Content>
+                        <StackPanel Margin="0,0,0,8">
+                            <Grid Margin="0,8,0,8">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Height="22"
+                                    Margin="0,2,0,2"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="Audio Format:"
+                                    TextAlignment="Center" />
+                                <ComboBox
+                                    Name="AudioFormatComboBox"
+                                    Grid.Row="1"
+                                    Height="28"
+                                    Margin="0,0,0,8"
+                                    VerticalAlignment="Center"
+                                    SelectionChanged="AudioFormatComboBox_Changed"
+                                    ItemsSource="{Binding}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Padding="4"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontSize="12"
+                                                Text="{Binding}"
+                                                TextAlignment="Left" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </Grid>
+
+                            <CheckBox
+                                Name="BestAudioCheckBox"
+                                Margin="0,8,0,8"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="Best Audio Quality"
+                                FontSize="14"
+                                IsChecked="True"
+                                TabIndex="8"
+                                Visibility="Visible" />
+                            <CheckBox
+                                Name="MetadataCheckBox"
+                                Margin="0,8,0,8"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="Include Video Metadata"
+                                FontSize="14"
+                                IsChecked="True"
+                                TabIndex="8"
+                                Visibility="Visible" />
+                            <CheckBox
+                                Name="ThumbnailCheckBox"
+                                Margin="0,8,0,8"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="Include Video Thumbnail"
+                                FontSize="14"
+                                IsChecked="False"
+                                TabIndex="8"
+                                Visibility="Visible" />
+                            <CheckBox
+                                Name="IsPlaylistCheckBox"
+                                Margin="0,8,0,8"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="Playlist"
+                                FontSize="14"
+                                IsChecked="False"
+                                IsEnabled="False"
+                                TabIndex="8"
+                                Visibility="Visible" />
+                        </StackPanel>
+
+                    </Expander.Content>
+                </Expander>
+            </StackPanel>
+
+            <Grid Margin="0,0,0,8" DockPanel.Dock="Bottom">
+                <Button
+                    Name="DownloadBtn"
+                    Height="36"
+                    Margin="0,24,0,0"
+                    Padding="4"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Click="DownloadBtn_Click"
+                    Content="Download"
+                    TabIndex="8" />
+            </Grid>
+        </DockPanel>
+    </DockPanel>
+</Window>
