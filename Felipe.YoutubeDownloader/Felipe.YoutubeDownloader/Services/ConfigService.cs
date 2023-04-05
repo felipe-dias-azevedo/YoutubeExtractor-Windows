@@ -40,7 +40,7 @@ namespace Felipe.YoutubeDownloader
             {
                 CreateConfigFile();
 
-                if (!File.Exists(OptionsModel.GetYtDlpDefaultFolder()) && !Directory.Exists(OptionsModel.GetFfmpegDefaultFolder()))
+                if (!File.Exists(OptionsModel.GetYtDlpDefaultFolder()))
                 {
                     var response = MessageBox.Show(
                         "Would you like to automatically download and configure yt-dlp and ffmpeg to default folder?\n\n" +
