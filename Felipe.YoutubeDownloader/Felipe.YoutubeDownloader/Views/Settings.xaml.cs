@@ -187,7 +187,7 @@ namespace Felipe.YoutubeDownloader.Views
 
         private async void FfmpegDownloadBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(OptionsModel.GetFfmpegDefaultFolder()))
+            if (File.Exists(OptionsModel.GetFfmpegDefaultFile()))
             {
                 var response = MessageBox.Show("File already exists. Do you want to download again?", "Cancelled", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 

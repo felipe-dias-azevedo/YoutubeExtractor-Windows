@@ -58,6 +58,11 @@ namespace Felipe.YoutubeDownloader
             return Directory.GetCurrentDirectory();
         }
 
+        public static string GetFfmpegDefaultFile()
+        {
+            return Path.Combine(Directory.GetCurrentDirectory(), "ffmpeg.exe");
+        }
+
         public static string GetOutputDefaultFolder()
         {
             return Path.Combine(Directory.GetCurrentDirectory(), "output");
