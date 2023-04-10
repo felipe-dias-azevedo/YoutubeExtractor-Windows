@@ -9,10 +9,24 @@
     <UseWPF>true</UseWPF>
 	<AssemblyName>YoutubeExtractor</AssemblyName>
 	<ApplicationIcon>icon.ico</ApplicationIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>https://github.com/felipe-dias-azevedo/YoutubeExtractor-Windows</RepositoryUrl>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
