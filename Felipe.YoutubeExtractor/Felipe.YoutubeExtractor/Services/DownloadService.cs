@@ -69,6 +69,11 @@ namespace Felipe.YoutubeExtractor.Services
             var resultPath = Path.Combine(Directory.GetCurrentDirectory(), entry.FullName);
 
             entry.ExtractToFile(resultPath, true);
+
+            stream.Dispose();
+            archive.Dispose();
+
+            File.Delete(path);
         }
 
         /// <summary>
