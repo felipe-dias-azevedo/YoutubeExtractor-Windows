@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Felipe.YoutubeDownloader.Extensions
+namespace Felipe.YoutubeExtractor.Extensions
 {
     public static class HttpClientExtensions
     {

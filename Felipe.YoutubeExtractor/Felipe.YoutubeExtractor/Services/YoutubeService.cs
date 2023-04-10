@@ -1,4 +1,4 @@
-﻿using Felipe.YoutubeDownloader.Models;
+﻿using Felipe.YoutubeExtractor.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using YoutubeDLSharp;
 using YoutubeDLSharp.Options;
 
-namespace Felipe.YoutubeDownloader.Services
+namespace Felipe.YoutubeExtractor.Services
 {
     public class YoutubeService
     {

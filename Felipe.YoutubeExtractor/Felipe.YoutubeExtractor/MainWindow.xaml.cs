@@ -1,4 +1,4 @@
-﻿using Felipe.YoutubeDownloader.Views;
+﻿using Felipe.YoutubeExtractor.Views;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using System;
@@ -22,7 +22,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using YoutubeDLSharp.Options;
 
-namespace Felipe.YoutubeDownloader
+namespace Felipe.YoutubeExtractor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -1,4 +1,4 @@
-﻿using Felipe.YoutubeDownloader.Services;
+﻿using Felipe.YoutubeExtractor.Services;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using System;
@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using YoutubeDLSharp;
 
-namespace Felipe.YoutubeDownloader.Views
+namespace Felipe.YoutubeExtractor.Views
 {
     /// <summary>
     /// Lógica interna para Settings.xaml

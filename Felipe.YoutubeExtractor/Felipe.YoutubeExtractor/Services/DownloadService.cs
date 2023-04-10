@@ -11,10 +11,10 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using Felipe.YoutubeDownloader.Extensions;
+using Felipe.YoutubeExtractor.Extensions;
 using System.Security.Policy;
 
-namespace Felipe.YoutubeDownloader.Services
+namespace Felipe.YoutubeExtractor.Services
 {
     class DownloadService
     {

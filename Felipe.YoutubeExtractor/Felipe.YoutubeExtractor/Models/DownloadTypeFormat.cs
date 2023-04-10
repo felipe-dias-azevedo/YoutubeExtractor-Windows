@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Felipe.YoutubeDownloader.Models
+namespace Felipe.YoutubeExtractor.Models
 {
     public enum DownloadTypeFormat
     {

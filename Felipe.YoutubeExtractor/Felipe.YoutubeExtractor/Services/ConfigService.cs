@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Felipe.YoutubeDownloader
+namespace Felipe.YoutubeExtractor
 {
     public static class ConfigService
     {

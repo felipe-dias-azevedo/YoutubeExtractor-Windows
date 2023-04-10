@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Felipe.YoutubeDownloader
+namespace Felipe.YoutubeExtractor
 {
     public static class FileService
     {

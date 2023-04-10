@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="Felipe.YoutubeDownloader.App"
+    x:Class="Felipe.YoutubeExtractor.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Felipe.YoutubeDownloader"
+    xmlns:local="clr-namespace:Felipe.YoutubeExtractor"
     StartupUri="MainWindow.xaml">
     <Application.Resources />
 </Application>

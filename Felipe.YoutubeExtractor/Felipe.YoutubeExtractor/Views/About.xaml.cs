@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Felipe.YoutubeDownloader.Views
+namespace Felipe.YoutubeExtractor.Views
 {
     /// <summary>
     /// Lógica interna para About.xaml

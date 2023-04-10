@@ -1,4 +1,4 @@
-﻿using Felipe.YoutubeDownloader.Services;
+﻿using Felipe.YoutubeExtractor.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ using YoutubeDLSharp;
 using YoutubeDLSharp.Options;
 using static System.Windows.Forms.Design.AxImporter;
 
-namespace Felipe.YoutubeDownloader
+namespace Felipe.YoutubeExtractor
 {
     /// <summary>
     /// Lógica interna para DownloadProgress.xaml

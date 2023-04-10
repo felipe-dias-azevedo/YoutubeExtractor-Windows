@@ -1,4 +1,4 @@
-﻿using Felipe.YoutubeDownloader.Models;
+﻿using Felipe.YoutubeExtractor.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YoutubeDLSharp.Options;
 
-namespace Felipe.YoutubeDownloader
+namespace Felipe.YoutubeExtractor
 {
     public class OptionsModel
     {

@@ -1,11 +1,11 @@
 ﻿<Window
-    x:Class="Felipe.YoutubeDownloader.MainWindow"
+    x:Class="Felipe.YoutubeExtractor.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Felipe.YoutubeDownloader"
+    xmlns:local="clr-namespace:Felipe.YoutubeExtractor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Youtube Downloader"
+    Title="Youtube Extractor"
     Width="600"
     Height="550"
     MinWidth="400"
@@ -28,7 +28,7 @@
                 <Label
                     Margin="0,0,0,24"
                     HorizontalAlignment="Left"
-                    Content="Youtube Downloader"
+                    Content="Youtube Extractor"
                     FontFamily="Segoe UI Semilight"
                     FontSize="26" />
             </Grid>
@@ -102,8 +102,8 @@
                                     Height="28"
                                     Margin="0,0,0,8"
                                     VerticalAlignment="Center"
-                                    SelectionChanged="AudioFormatComboBox_Changed"
-                                    ItemsSource="{Binding}">
+                                    ItemsSource="{Binding}"
+                                    SelectionChanged="AudioFormatComboBox_Changed">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock

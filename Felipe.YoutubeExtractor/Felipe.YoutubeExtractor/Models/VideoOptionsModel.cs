@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YoutubeDLSharp.Options;
 
-namespace Felipe.YoutubeDownloader
+namespace Felipe.YoutubeExtractor
 {
     public class VideoOptionsModel : OptionsModel
     {
