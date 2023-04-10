@@ -1,25 +1,11 @@
-﻿using Felipe.YoutubeExtractor.Views;
-using Microsoft.Win32;
-using Ookii.Dialogs.Wpf;
+﻿using Felipe.YoutubeExtractor.Extensions;
+using Felipe.YoutubeExtractor.Services;
+using Felipe.YoutubeExtractor.Views;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using YoutubeDLSharp.Options;
 
 namespace Felipe.YoutubeExtractor
@@ -72,6 +58,7 @@ namespace Felipe.YoutubeExtractor
         private void YoutubeUrlTextBox_Changed(object sender, RoutedEventArgs e)
         {
             IsPlaylistCheckBox.IsChecked = YoutubeUrlTextBox.Text.Contains("list=");
+            YoutubeUrlTextBox.Text = YoutubeUrlTextBox.Text.RemoveAllWhitespaces();
         }
 
         private void AudioFormatComboBox_Changed(object sender, SelectionChangedEventArgs e)
@@ -112,7 +99,7 @@ namespace Felipe.YoutubeExtractor
                 return;
             }
 
-            if (!Regex.IsMatch(YoutubeUrlTextBox.Text, @"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$"))
+            if (!YoutubeService.IsValidUrl(YoutubeUrlTextBox.Text))
             {
                 MessageBox.Show("Youtube URL might not be valid.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }

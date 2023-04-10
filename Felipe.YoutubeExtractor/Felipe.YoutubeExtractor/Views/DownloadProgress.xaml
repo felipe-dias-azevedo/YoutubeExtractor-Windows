@@ -9,12 +9,15 @@
     MinWidth="300"
     MinHeight="160"
     Closing="Window_Closing"
-    ResizeMode="NoResize"
+    ResizeMode="CanMinimize"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <DockPanel Margin="10">
-        <Grid VerticalAlignment="Center" DockPanel.Dock="Top">
+        <Grid
+            Margin="0,0,0,16"
+            VerticalAlignment="Center"
+            DockPanel.Dock="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -55,6 +58,17 @@
                 IsIndeterminate="False"
                 Maximum="1"
                 Minimum="0"
+                Visibility="Visible" />
+
+            <CheckBox
+                Name="AutoCloseCheckBox"
+                Grid.Row="2"
+                Margin="0,8,0,8"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Content="Auto close when done"
+                IsChecked="False"
+                TabIndex="8"
                 Visibility="Visible" />
         </Grid>
 

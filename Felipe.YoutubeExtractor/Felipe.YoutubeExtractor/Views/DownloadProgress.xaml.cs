@@ -1,23 +1,11 @@
-﻿using Felipe.YoutubeExtractor.Services;
-using Newtonsoft.Json.Linq;
+﻿using Felipe.YoutubeExtractor.Extensions;
+using Felipe.YoutubeExtractor.Services;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using YoutubeDLSharp;
-using YoutubeDLSharp.Options;
-using static System.Windows.Forms.Design.AxImporter;
 
 namespace Felipe.YoutubeExtractor
 {
@@ -56,6 +44,7 @@ namespace Felipe.YoutubeExtractor
 
             if (downloadDependencies)
             {
+                // FIXME: Start async and await for it until done to show main window
                 StartDependenciesDownload();
             }
         }
@@ -83,7 +72,7 @@ namespace Felipe.YoutubeExtractor
                 DownloadLabel.Content = "Downloading yt-dlp...";
                 await DownloadService.DownloadYtDlp(cancellationToken: _cts.Token, progress: progressYtDlp);
 
-                DownloadLabel.Content = "Downloading ffmpeg...";
+                DownloadLabel.Content = "Downloading FFmpeg...";
                 await DownloadService.DownloadFFmpeg(cancellationToken: _cts.Token, progress: progressFfmpeg);
 
                 DownloadFinished();
@@ -111,7 +100,7 @@ namespace Felipe.YoutubeExtractor
                     DownloadProgressBar.Value = p;
                 });
 
-                DownloadLabel.Content = "Downloading...";
+                DownloadLabel.Content = "Downloading yt-dlp...";
                 await DownloadService.DownloadYtDlp(cancellationToken: _cts.Token, progress: progress);
 
                 DownloadFinished();
@@ -139,7 +128,7 @@ namespace Felipe.YoutubeExtractor
                     DownloadProgressBar.Value = p;
                 });
 
-                DownloadLabel.Content = "Downloading...";
+                DownloadLabel.Content = "Downloading FFmpeg...";
                 await DownloadService.DownloadFFmpeg(cancellationToken: _cts.Token, progress: progress);
 
                 DownloadFinished();
@@ -167,20 +156,26 @@ namespace Felipe.YoutubeExtractor
 
             var progress = new Progress<YoutubeDLSharp.DownloadProgress>(p => 
             {
-                var points = p.State != DownloadState.Error || p.State != DownloadState.Success ? "..." : "";
-                var state = p.State == DownloadState.Error || p.State == DownloadState.Success ? "Loading" : p.State.ToString();
+                var progressState = p.State == DownloadState.Error || p.State == DownloadState.Success;
+
+                var state = progressState ? "Loading" : p.State.ToString().CapitalizedToSpaceJoined();
                 var percent = p.Progress * 100;
 
-                DownloadLabel.Content = $"{state}{points}";
-                DownloadProgressLabel.Content = string.Format("{0:0.0}%", percent);
-                DownloadProgressBar.Value = p.Progress;
+                DownloadLabel.Content = $"{state}...";
+                DownloadProgressBar.IsIndeterminate = p.State == DownloadState.PreProcessing || p.State == DownloadState.PostProcessing;
+
+                if (!progressState && DownloadProgressBar.Value <= p.Progress)
+                {
+                    DownloadProgressLabel.Content = string.Format("{0:0.0}%", percent >= 99 ? 99 : percent);
+                    DownloadProgressBar.Value = p.Progress;
+                }
             });
 
             var res = await youtube.Download(_cts.Token, progress);
 
             if (!res.Success)
             {
-                MessageBox.Show(string.Join(" ", res.ErrorOutput), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Join("\n", res.ErrorOutput), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 
                 Close();
 
@@ -198,6 +193,14 @@ namespace Felipe.YoutubeExtractor
             DownloadLabel.Content = "Download Finished.";
             DownloadProgressLabel.Content = "100%";
             DownloadProgressBar.Value = 1;
+            DownloadProgressBar.IsIndeterminate = false;
+
+            var autoClose = AutoCloseCheckBox.IsChecked ?? false;
+
+            if (autoClose)
+            {
+                Close();
+            }
         }
 
         private void OkBtn_Click(object sender, RoutedEventArgs e)

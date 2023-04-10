@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using YoutubeDLSharp;
@@ -16,6 +17,8 @@ namespace Felipe.YoutubeExtractor.Services
         private readonly VideoOptionsModel _videoOptions;
         private readonly YoutubeDL _youtubeDl;
 
+        private const string _validYoutubeUrl = @"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$";
+
         public YoutubeService(VideoOptionsModel videoOptions)
         {
             _videoOptions = videoOptions;
@@ -24,6 +27,11 @@ namespace Felipe.YoutubeExtractor.Services
                 YoutubeDLPath = FileService.ConvertExecutable(_videoOptions.YtdlpPath),
                 OutputFolder = _videoOptions.OutputPath
             };
+        }
+
+        public static bool IsValidUrl(string url)
+        {
+            return Regex.IsMatch(url, _validYoutubeUrl);
         }
 
         public async Task<RunResult<string>> Download(CancellationToken cancellationToken = default, Progress<YoutubeDLSharp.DownloadProgress>? progress = null)
