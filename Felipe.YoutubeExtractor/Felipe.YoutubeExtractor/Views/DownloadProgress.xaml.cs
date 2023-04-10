@@ -2,10 +2,12 @@
 using Felipe.YoutubeExtractor.Services;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using YoutubeDLSharp;
+using static System.Windows.Forms.AxHost;
 
 namespace Felipe.YoutubeExtractor
 {
@@ -180,6 +182,25 @@ namespace Felipe.YoutubeExtractor
                 Close();
 
                 return;
+            }
+
+            if (_videoOptions.NormalizeAudio)
+            {
+                DownloadLabel.Content = $"Normalizing Audio...";
+                DownloadProgressBar.IsIndeterminate = true;
+
+                try
+                {
+                    await youtube.Normalize(res.Data, _cts.Token);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    Close();
+
+                    return;
+                }
             }
 
             DownloadFinished();

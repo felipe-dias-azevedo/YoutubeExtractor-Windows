@@ -32,6 +32,7 @@ namespace Felipe.YoutubeExtractor
             MetadataCheckBox.IsChecked = config.Metadata;
             ThumbnailCheckBox.IsChecked = config.EmbedThumbnail;
             AudioFormatComboBox.SelectedItem = config.AudioFormat;
+            NormalizeAudioCheckBox.IsChecked = config.NormalizeAudio;
         }
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -78,9 +79,9 @@ namespace Felipe.YoutubeExtractor
         {
             var config = ConfigService.StartupConfig();
 
-            if (string.IsNullOrEmpty(config.OutputPath) || 
-                string.IsNullOrEmpty(YoutubeUrlTextBox.Text) || 
-                string.IsNullOrEmpty(config.YtdlpPath) || 
+            if (string.IsNullOrEmpty(config.OutputPath) ||
+                string.IsNullOrEmpty(YoutubeUrlTextBox.Text) ||
+                string.IsNullOrEmpty(config.YtdlpPath) ||
                 string.IsNullOrEmpty(config.FfmpegPath))
             {
                 MessageBox.Show("Required information not informed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -117,6 +118,7 @@ namespace Felipe.YoutubeExtractor
                 YoutubeUrl = YoutubeUrlTextBox.Text,
                 FfmpegPath = config.FfmpegPath,
                 AudioFormat = (AudioConversionFormat) AudioFormatComboBox.SelectedValue,
+                NormalizeAudio = NormalizeAudioCheckBox.IsChecked ?? false,
                 //DownloadType = ,
                 //Format = ,
                 BestAudio = BestAudioCheckBox.IsChecked ?? true,

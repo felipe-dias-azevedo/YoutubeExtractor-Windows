@@ -47,6 +47,7 @@ namespace Felipe.YoutubeExtractor
         public AudioConversionFormat AudioFormat { get; set; } = AudioConversionFormat.Mp3;
         public bool Metadata { get; set; } = true;
         public bool EmbedThumbnail { get; set; }
+        public bool NormalizeAudio { get; set; }
 
         public static string GetYtDlpDefaultFolder()
         {
@@ -58,9 +59,14 @@ namespace Felipe.YoutubeExtractor
             return Directory.GetCurrentDirectory();
         }
 
+        public static string GetFfmpegDefaultFileName()
+        {
+            return "ffmpeg.exe";
+        }
+
         public static string GetFfmpegDefaultFile()
         {
-            return Path.Combine(Directory.GetCurrentDirectory(), "ffmpeg.exe");
+            return Path.Combine(Directory.GetCurrentDirectory(), GetFfmpegDefaultFileName());
         }
 
         public static string GetOutputDefaultFolder()

@@ -1,7 +1,11 @@
-﻿using Felipe.YoutubeExtractor.Models;
+﻿using Felipe.YoutubeExtractor.Extensions;
+using Felipe.YoutubeExtractor.Models;
+using FFmpeg.NET;
+using FFmpeg.NET.Events;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -55,6 +59,60 @@ namespace Felipe.YoutubeExtractor.Services
                 format: _videoOptions.Format, 
                 progress: progress, 
                 overrideOptions: customOptions);
+        }
+
+        public async Task Normalize(string fileExportPath, CancellationToken cancellationToken = default)
+        {
+            var ffmpegPath = Path.Combine(_videoOptions.FfmpegPath, OptionsModel.GetFfmpegDefaultFileName());
+            var ffmpeg = new Engine(ffmpegPath);
+
+            var filePath = FileService.ConvertExecutable(fileExportPath);
+
+            string? volume = null;
+
+            ffmpeg.Data += (sender, e) => 
+            {
+                if (e.Data != null && e.Data.Contains("max_volume"))
+                {
+                    var tempVolume = e.Data.Split(":").LastOrDefault()?.Trim();
+
+                    if (tempVolume == null)
+                    {
+                        return;
+                    }
+
+                    if (tempVolume.Contains('+'))
+                    {
+                        tempVolume = tempVolume.Replace("+", "-");
+                    } 
+                    else if (tempVolume.Contains('-'))
+                    {
+                        tempVolume = tempVolume.Replace("-", "");
+                    }
+
+                    volume = tempVolume.RemoveAllWhitespaces();
+                }
+            };
+
+            await ffmpeg.ExecuteAsync($"-i {filePath} -filter:a volumedetect -f null NUL", cancellationToken);
+
+            if (volume == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ffmpeg.Error += (sender, e) => throw e.Exception;
+
+            var tempOutputNames = Path.GetFileName(fileExportPath).Split(".");
+            tempOutputNames[0] = tempOutputNames[0] + "-normalized";
+            var tempOutputName = string.Join(".", tempOutputNames);
+            var tempOutputNamePath = Path.Combine(FileService.GetFolderPathFromFilePath(fileExportPath)!, tempOutputName);
+            var tempOutputPath = FileService.ConvertExecutable(tempOutputNamePath);
+
+            await ffmpeg.ExecuteAsync($"-y -i {filePath} -movflags use_metadata_tags -map_metadata 0 -filter:a \"volume={volume}\" -q:a 0 {tempOutputPath}", cancellationToken);
+
+            File.Delete(fileExportPath);
+            File.Move(tempOutputNamePath, fileExportPath);
         }
     }
 }
