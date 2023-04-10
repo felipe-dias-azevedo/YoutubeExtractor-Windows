@@ -10,6 +10,7 @@
     MinHeight="140"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
+    UseLayoutRounding="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <DockPanel Margin="10">
@@ -20,15 +21,31 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label
-                Grid.Row="0"
-                Margin="0,0,0,8"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                FontFamily="Segoe UI Semilight"
-                FontSize="20">
-                Youtube Extractor
-            </Label>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Image
+                    Grid.Column="0"
+                    Height="64"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    RenderOptions.BitmapScalingMode="HighQuality"
+                    Source="/Assets/logo.png" />
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,8"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center"
+                    FontFamily="Segoe UI Semilight"
+                    FontSize="24">
+                    Youtube Extractor
+                </Label>
+            </Grid>
 
             <Label
                 Grid.Row="1"
