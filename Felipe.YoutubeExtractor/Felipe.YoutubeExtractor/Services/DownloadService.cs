@@ -1,18 +1,13 @@
-﻿using Microsoft.VisualBasic;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Felipe.YoutubeExtractor.Extensions;
-using System.Security.Policy;
 
 namespace Felipe.YoutubeExtractor.Services
 {

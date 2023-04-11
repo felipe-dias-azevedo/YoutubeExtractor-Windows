@@ -1,17 +1,15 @@
 ﻿using Felipe.YoutubeExtractor.Extensions;
 using Felipe.YoutubeExtractor.Models;
 using FFmpeg.NET;
-using FFmpeg.NET.Events;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using YoutubeDLSharp;
+using YoutubeDLSharp.Metadata;
 using YoutubeDLSharp.Options;
 
 namespace Felipe.YoutubeExtractor.Services
@@ -28,9 +26,16 @@ namespace Felipe.YoutubeExtractor.Services
             _videoOptions = videoOptions;
             _youtubeDl = new YoutubeDL
             {
-                YoutubeDLPath = FileService.ConvertExecutable(_videoOptions.YtdlpPath),
-                OutputFolder = _videoOptions.OutputPath
+                //YoutubeDLPath = FileService.ConvertExecutable(_videoOptions.YtdlpPath),
+                YoutubeDLPath = _videoOptions.YtdlpPath,
+                OutputFolder = _videoOptions.OutputPath,
+                OutputFileTemplate = "%(title)s.%(ext)s"
             };
+        }
+
+        public static string GetUrlFromId(string id)
+        {
+            return $"https://www.youtube.com/watch?v={id}";
         }
 
         public static bool IsValidUrl(string url)
@@ -38,14 +43,21 @@ namespace Felipe.YoutubeExtractor.Services
             return Regex.IsMatch(url, _validYoutubeUrl);
         }
 
-        public async Task<RunResult<string>> Download(CancellationToken cancellationToken = default, Progress<YoutubeDLSharp.DownloadProgress>? progress = null)
+        public async Task<string> Download(string? videoUrl = null, CancellationToken cancellationToken = default, Progress<YoutubeDLSharp.DownloadProgress>? progress = null)
         {
+            var url = _videoOptions.YoutubeUrl;
+
+            if (videoUrl != null)
+            {
+                url = videoUrl!;
+            }
+
             var customOptions = new OptionSet
             {
                 Format = _videoOptions.Format,
                 FfmpegLocation = _videoOptions.FfmpegPath,
                 AudioFormat = _videoOptions.AudioFormat,
-                AddMetadata = _videoOptions.Metadata,
+                EmbedMetadata = _videoOptions.Metadata,
                 AudioQuality = _videoOptions.BestAudio ? 0 : null,
                 YesPlaylist = _videoOptions.IsPlaylist,
                 EmbedThumbnail = _videoOptions.EmbedThumbnail,
@@ -54,11 +66,74 @@ namespace Felipe.YoutubeExtractor.Services
 
             //customOptions.AddCustomOption("--paths", _videoOptions.OutputPath);
 
-            return await _youtubeDl.RunVideoDownload(_videoOptions.YoutubeUrl, 
+            var res = await _youtubeDl.RunVideoDownload(url, 
                 ct: cancellationToken, 
                 format: _videoOptions.Format, 
                 progress: progress, 
                 overrideOptions: customOptions);
+
+            if (res == null)
+            {
+                throw new InvalidOperationException("No response from fetching.");
+            }
+
+            if (!res.Success)
+            {
+                throw new Exception(string.Join("\n", res.ErrorOutput));
+            }
+
+            return res.Data;
+        }
+
+        public async Task<List<string>> GetVideoIds(CancellationToken cancellationToken = default)
+        {
+            var ytdlProc = new YoutubeDLProcess(_videoOptions.YtdlpPath);
+
+            var output = new List<string?>();
+            var error = new List<string?>();
+            
+            ytdlProc.OutputReceived += (o, e) => output.Add(e.Data);
+            ytdlProc.ErrorReceived += (o, e) => error.Add(e.Data);
+
+            var urls = new[] { _videoOptions.YoutubeUrl };
+
+            var customOptions = new OptionSet
+            {
+                Print = "id"
+            };
+
+            await ytdlProc.RunAsync(urls, customOptions, cancellationToken);
+
+            if (error.Any(x => !string.IsNullOrEmpty(x))) 
+            {
+                throw new Exception(string.Join("\n", error));
+            }
+
+            return output.Where(x => !string.IsNullOrEmpty(x)).Select(x => x!).ToList();
+        }
+
+        public async Task<VideoData> Fetch(string? videoUrl = null, CancellationToken cancellationToken = default)
+        {
+            var url = _videoOptions.YoutubeUrl;
+
+            if (videoUrl != null)
+            {
+                url = videoUrl;
+            }
+
+            var res = await _youtubeDl.RunVideoDataFetch(url, ct: cancellationToken/*, flat: !_videoOptions.IsPlaylist*/);
+            
+            if (res == null)
+            {
+                throw new InvalidOperationException("No response from fetching.");
+            }
+
+            if (!res.Success) 
+            {
+                throw new Exception(string.Join("\n", res.ErrorOutput));
+            }
+
+            return res.Data;
         }
 
         public async Task Normalize(string fileExportPath, CancellationToken cancellationToken = default)
