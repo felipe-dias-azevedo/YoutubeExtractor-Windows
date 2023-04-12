@@ -145,7 +145,7 @@ namespace Felipe.YoutubeExtractor.Views
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            var config = ConfigService.StartupConfig();
+            var config = ConfigService.StartupConfig(out _);
 
             config.YtdlpPath = YtDlpFilePathTextBox.Text;
             config.YtdlpPathDefaultFolder = YtDlpDefaultFolderCheckBox.IsChecked ?? true;
@@ -177,7 +177,9 @@ namespace Felipe.YoutubeExtractor.Views
 
             try
             {
-                await downloadDialog.StartYtDlpDownload();
+                var downloadTask = downloadDialog.StartYtDlpDownload();
+                downloadDialog.ShowDialog();
+                await downloadTask;
             }
             catch (TaskCanceledException)
             {
@@ -201,7 +203,9 @@ namespace Felipe.YoutubeExtractor.Views
 
             try
             {
-                await downloadDialog.StartFfmpegDownload();
+                var downloadTask = downloadDialog.StartFfmpegDownload();
+                downloadDialog.ShowDialog();
+                await downloadTask;
             }
             catch (TaskCanceledException) 
             {

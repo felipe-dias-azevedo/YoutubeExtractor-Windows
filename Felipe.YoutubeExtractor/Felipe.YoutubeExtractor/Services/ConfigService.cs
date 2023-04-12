@@ -32,35 +32,21 @@ namespace Felipe.YoutubeExtractor
             }
         }
 
-        public static OptionsModel StartupConfig()
+        public static bool ShouldAskDownload()
         {
+            return File.Exists(OptionsModel.GetYtDlpDefaultFolder()) || File.Exists(OptionsModel.GetFfmpegDefaultFile());
+        }
+
+        public static OptionsModel StartupConfig(out bool createdConfig)
+        {
+            createdConfig = false;
             CreateOutputFolderIfNotExists();
 
             if (!File.Exists(_path))
             {
                 CreateConfigFile();
 
-                if (!File.Exists(OptionsModel.GetYtDlpDefaultFolder()) && !File.Exists(OptionsModel.GetFfmpegDefaultFile()))
-                {
-                    var response = MessageBox.Show(
-                        "Would you like to automatically download and configure yt-dlp and ffmpeg to default folder?\n\n" +
-                        "NO - \"I already have them, and I will configure their path on settings.\"",
-                        "Download Dependencies",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question);
-
-                    if (response == MessageBoxResult.Yes)
-                    {
-                        try
-                        {
-                            _ = new DownloadProgress(downloadDependencies: true);
-                        }
-                        catch (TaskCanceledException)
-                        {
-                            MessageBox.Show("Download cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                    }
-                }
+                createdConfig = true;
             }
 
             var configString = File.ReadAllText(_path);
@@ -69,6 +55,8 @@ namespace Felipe.YoutubeExtractor
 
             if (config == null)
             {
+                createdConfig = true;
+
                 return CreateConfigFile();
             }
 

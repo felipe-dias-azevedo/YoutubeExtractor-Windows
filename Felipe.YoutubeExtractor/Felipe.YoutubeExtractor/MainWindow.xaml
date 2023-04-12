@@ -10,6 +10,7 @@
     Height="600"
     MinWidth="400"
     MinHeight="600"
+    Loaded="Window_Loaded"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <DockPanel>
@@ -18,7 +19,7 @@
                 <MenuItem Click="SettingsMenuItem_Click" Header="_Settings" />
                 <MenuItem
                     Name="AutoCloseDoneMenuItem"
-                    Header="Close Download Window when Done"
+                    Header="_Close Download Window when Done"
                     IsCheckable="True"
                     IsChecked="False" />
                 <Separator />

@@ -43,23 +43,8 @@ namespace Felipe.YoutubeExtractor
             AutoCloseCheckBox.IsChecked = _videoOptions.AutoCloseWhenDone;
         }
 
-        public DownloadProgress(bool downloadDependencies = true)
-        {
-            _cts = new CancellationTokenSource();
-
-            InitializeComponent();
-
-            if (downloadDependencies)
-            {
-                // FIXME: Start async and await for it until done to show main window
-                StartDependenciesDownload();
-            }
-        }
-
         public async Task StartDependenciesDownload()
         {
-            Show();
-
             try
             {
                 var progressYtDlp = new Progress<float>(p =>
@@ -96,8 +81,6 @@ namespace Felipe.YoutubeExtractor
 
         public async Task StartYtDlpDownload()
         {
-            Show();
-
             try
             {
                 var progress = new Progress<float>(p =>
@@ -124,8 +107,6 @@ namespace Felipe.YoutubeExtractor
 
         public async Task StartFfmpegDownload()
         {
-            Show();
-
             try
             {
                 var progress = new Progress<float>(p =>
@@ -214,8 +195,6 @@ namespace Felipe.YoutubeExtractor
             {
                 throw new InvalidOperationException("VideoOptions not informed for Video Download.");
             }
-
-            Show();
 
             var youtube = new YoutubeService(_videoOptions);
 

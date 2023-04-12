@@ -17,13 +17,49 @@ namespace Felipe.YoutubeExtractor
     {
         public MainWindow()
         {
-            var config = ConfigService.StartupConfig();
-
             InitializeComponent();
+        }
+
+        private async Task DownloadDependencies()
+        {
+            var response = MessageBox.Show(
+                "Would you like to automatically download and configure yt-dlp and ffmpeg to default folder?\n\n" +
+                "NO - \"I already have them, and I will configure their path on settings.\"",
+                "Download Dependencies",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (response != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            var download = new DownloadProgress(progressVisible: true);
+
+            try
+            {
+                var downloadTask = download.StartDependenciesDownload();
+                download.ShowDialog();
+                await downloadTask;
+            }
+            catch (TaskCanceledException)
+            {
+                MessageBox.Show("Download cancelled.", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var config = ConfigService.StartupConfig(out var createdConfig);
 
             AudioFormatComboBox.ItemsSource = Enum.GetValues(typeof(AudioConversionFormat));
 
             LoadConfig(config);
+
+            if (createdConfig && ConfigService.ShouldAskDownload())
+            {
+                await DownloadDependencies();
+            }
         }
 
         private void LoadConfig(OptionsModel config)
@@ -38,7 +74,7 @@ namespace Felipe.YoutubeExtractor
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var config = ConfigService.StartupConfig();
+            var config = ConfigService.StartupConfig(out _);
 
             var settings = new Settings(config);
 
@@ -78,7 +114,7 @@ namespace Felipe.YoutubeExtractor
 
         private async void DownloadBtn_Click(object sender, RoutedEventArgs e)
         {
-            var config = ConfigService.StartupConfig();
+            var config = ConfigService.StartupConfig(out _);
 
             if (string.IsNullOrEmpty(config.OutputPath) ||
                 string.IsNullOrEmpty(YoutubeUrlTextBox.Text) ||
@@ -134,6 +170,7 @@ namespace Felipe.YoutubeExtractor
             var downloadDialog = new DownloadProgress(videoOptionsModel: videoOptions);
             try
             {
+                downloadDialog.Show();
                 await downloadDialog.StartVideoDownload();
             } 
             catch (TaskCanceledException) 
