@@ -33,6 +33,7 @@ namespace Felipe.YoutubeExtractor
             ThumbnailCheckBox.IsChecked = config.EmbedThumbnail;
             AudioFormatComboBox.SelectedItem = config.AudioFormat;
             NormalizeAudioCheckBox.IsChecked = config.NormalizeAudio;
+            AutoCloseDoneMenuItem.IsChecked = config.AutoCloseWhenDone;
         }
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -124,7 +125,8 @@ namespace Felipe.YoutubeExtractor
                 BestAudio = BestAudioCheckBox.IsChecked ?? true,
                 IsPlaylist = IsPlaylistCheckBox.IsChecked ?? false,
                 Metadata = MetadataCheckBox.IsChecked ?? true,
-                EmbedThumbnail = ThumbnailCheckBox.IsChecked ?? false
+                EmbedThumbnail = ThumbnailCheckBox.IsChecked ?? false,
+                AutoCloseWhenDone = AutoCloseDoneMenuItem.IsChecked
             };
 
             ConfigService.UpdateConfig(videoOptions);

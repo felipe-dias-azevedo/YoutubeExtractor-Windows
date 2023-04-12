@@ -39,6 +39,8 @@ namespace Felipe.YoutubeExtractor
             _cts = new CancellationTokenSource();
 
             InitializeComponent();
+
+            AutoCloseCheckBox.IsChecked = _videoOptions.AutoCloseWhenDone;
         }
 
         public DownloadProgress(bool downloadDependencies = true)

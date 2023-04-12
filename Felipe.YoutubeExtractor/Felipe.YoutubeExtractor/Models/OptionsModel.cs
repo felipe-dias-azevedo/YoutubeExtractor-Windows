@@ -48,6 +48,7 @@ namespace Felipe.YoutubeExtractor
         public bool Metadata { get; set; } = true;
         public bool EmbedThumbnail { get; set; }
         public bool NormalizeAudio { get; set; }
+        public bool AutoCloseWhenDone { get; set; }
 
         public static string GetYtDlpDefaultFolder()
         {
