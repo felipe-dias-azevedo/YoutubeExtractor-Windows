@@ -33,9 +33,14 @@ namespace Felipe.YoutubeExtractor.Services
             };
         }
 
-        public static string GetUrlFromId(string id)
+        public static string GetVideoUrlFromId(string id)
         {
             return $"https://www.youtube.com/watch?v={id}";
+        }
+
+        public static string GetPlaylistUrlFromId(string id)
+        {
+            return $"https://www.youtube.com/playlist?list={id}";
         }
 
         public static bool IsValidUrl(string url)
@@ -85,13 +90,13 @@ namespace Felipe.YoutubeExtractor.Services
             return res.Data;
         }
 
-        public async Task<List<string>> GetVideoIds(CancellationToken cancellationToken = default)
+        public async Task<(List<string?>, List<string?>)> GetId(CancellationToken cancellationToken = default)
         {
             var ytdlProc = new YoutubeDLProcess(_videoOptions.YtdlpPath);
 
             var output = new List<string?>();
             var error = new List<string?>();
-            
+
             ytdlProc.OutputReceived += (o, e) => output.Add(e.Data);
             ytdlProc.ErrorReceived += (o, e) => error.Add(e.Data);
 
@@ -99,10 +104,25 @@ namespace Felipe.YoutubeExtractor.Services
 
             var customOptions = new OptionSet
             {
+                FlatPlaylist = _videoOptions.IsPlaylist,
                 Print = "id"
             };
 
             await ytdlProc.RunAsync(urls, customOptions, cancellationToken);
+
+            return (output, error);
+        }
+
+        public async Task<List<string>> GetVideoIdsSafe(CancellationToken cancellationToken = default)
+        {
+            var (output, error) = await GetId(cancellationToken);
+
+            return output.Where(x => !string.IsNullOrEmpty(x)).Select(x => x!).ToList();
+        }
+
+        public async Task<List<string>> GetVideoIds(CancellationToken cancellationToken = default)
+        {
+            var (output, error) = await GetId(cancellationToken);
 
             if (error.Any(x => !string.IsNullOrEmpty(x))) 
             {
@@ -110,6 +130,18 @@ namespace Felipe.YoutubeExtractor.Services
             }
 
             return output.Where(x => !string.IsNullOrEmpty(x)).Select(x => x!).ToList();
+        }
+
+        public async Task<VideoData?> FetchSafe(string? videoUrl = null, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return await Fetch(videoUrl, cancellationToken);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<VideoData> Fetch(string? videoUrl = null, CancellationToken cancellationToken = default)

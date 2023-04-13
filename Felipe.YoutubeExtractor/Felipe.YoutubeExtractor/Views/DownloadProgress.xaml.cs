@@ -2,11 +2,13 @@
 using Felipe.YoutubeExtractor.Services;
 using Felipe.YoutubeExtractor.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using YoutubeDLSharp;
 
@@ -137,25 +139,49 @@ namespace Felipe.YoutubeExtractor
             DownloadQueueView.Items.Refresh();
         }
 
-        private async Task<(string, string)> RunDownload(string id, Task<string> downloadTask)
+        private void UpdateProgressQueue()
         {
-            var videoInQueue = _downloadQueue.FirstOrDefault(x => x.Id == id);
-            
-            if (videoInQueue == null)
+            var generalTotal = _downloadQueue.Count();
+            var sum = _downloadQueue.Count(x => x.StatusEnum == PlaylistVideoTableRowStatus.Done);
+            var percent = (double)sum / generalTotal;
+
+            if (_videoOptions!.NormalizeAudio)
             {
-                throw new InvalidOperationException("Video not found on queue.");
+                var totalNormalize = generalTotal * 2;
+                var sumNormalize = (sum * 2) + _downloadQueue.Count(x => x.StatusEnum == PlaylistVideoTableRowStatus.DownloadDone);
+                percent = (double)sumNormalize / totalNormalize;
             }
+
+            DownloadProgressLabel.Content = $"{sum}/{generalTotal} - {(percent * 100):0.0}%";
+            DownloadProgressBar.Value = percent;
+        }
+
+        private async Task RunDownloadAndNormalize(string id, YoutubeService youtubeService)
+        {
+            var videoInQueue = _downloadQueue.FirstOrDefault(x => x.Id == id) 
+                ?? throw new InvalidOperationException("Video not found on queue.");
+
+            UpdateProgressQueue();
 
             try
             {
                 UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.DownloadInProgress);
 
-                var result = await downloadTask;
+                var downloadFilePath = await youtubeService.Download(id, _cts.Token);
 
-                UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.DownloadDone);
+                UpdateQueueOnStatus(videoInQueue, _videoOptions!.NormalizeAudio ? PlaylistVideoTableRowStatus.DownloadDone : PlaylistVideoTableRowStatus.Done);
+                UpdateProgressQueue();
 
-                return (result, id);
-            } 
+                if (_videoOptions.NormalizeAudio)
+                {
+                    UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.NormalizeInProgress);
+
+                    await youtubeService.Normalize(downloadFilePath, _cts.Token);
+
+                    UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.Done);
+                    UpdateProgressQueue();
+                }
+            }
             catch
             {
                 UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.Error);
@@ -164,28 +190,20 @@ namespace Felipe.YoutubeExtractor
             }
         }
 
-        private async Task RunNormalize(string id, Task normalizeTask)
+        private void SetProgressOnSingleVideoDownload(YoutubeDLSharp.DownloadProgress p)
         {
-            var videoInQueue = _downloadQueue.FirstOrDefault(x => x.Id == id);
+            var progressState = p.State == DownloadState.Error || p.State == DownloadState.Success;
 
-            if (videoInQueue == null)
+            var state = progressState ? "Loading" : p.State.ToString().CapitalizedToSpaceJoined();
+            var percent = p.Progress * 100;
+
+            DownloadLabel.Content = $"{state}...";
+            DownloadProgressBar.IsIndeterminate = p.State == DownloadState.PreProcessing || p.State == DownloadState.PostProcessing;
+
+            if (!progressState && DownloadProgressBar.Value <= p.Progress)
             {
-                throw new InvalidOperationException("Video not found on queue.");
-            }
-
-            try
-            {
-                UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.NormalizeInProgress);
-
-                await normalizeTask;
-
-                UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.Done);
-            }
-            catch
-            {
-                UpdateQueueOnStatus(videoInQueue, PlaylistVideoTableRowStatus.Error);
-
-                throw;
+                DownloadProgressLabel.Content = string.Format("{0:0.0}%", percent >= 99 ? 99 : percent);
+                DownloadProgressBar.Value = p.Progress;
             }
         }
 
@@ -198,22 +216,7 @@ namespace Felipe.YoutubeExtractor
 
             var youtube = new YoutubeService(_videoOptions);
 
-            var progress = new Progress<YoutubeDLSharp.DownloadProgress>(p => 
-            {
-                var progressState = p.State == DownloadState.Error || p.State == DownloadState.Success;
-
-                var state = progressState ? "Loading" : p.State.ToString().CapitalizedToSpaceJoined();
-                var percent = p.Progress * 100;
-
-                DownloadLabel.Content = $"{state}...";
-                DownloadProgressBar.IsIndeterminate = p.State == DownloadState.PreProcessing || p.State == DownloadState.PostProcessing;
-
-                if (!progressState && DownloadProgressBar.Value <= p.Progress)
-                {
-                    DownloadProgressLabel.Content = string.Format("{0:0.0}%", percent >= 99 ? 99 : percent);
-                    DownloadProgressBar.Value = p.Progress;
-                }
-            });
+            var progress = new Progress<YoutubeDLSharp.DownloadProgress>(p => SetProgressOnSingleVideoDownload(p));
 
             try
             {
@@ -221,18 +224,46 @@ namespace Felipe.YoutubeExtractor
                 {
                     DownloadProgressBar.IsIndeterminate = true;
                     DownloadProgressLabel.Content = "";
-                    DownloadLabel.Content = $"Fetching Playlist Videos...";
-                    var videosIds = await youtube.GetVideoIds(_cts.Token);
-                    var videosUrlId = videosIds.Select(id => YoutubeService.GetUrlFromId(id)).ToList();
 
-                    var fetchingParallel = videosUrlId.Select(id => youtube.Fetch(id, _cts.Token));
+                    DownloadLabel.Content = $"Fetching Playlist's Data...";
+                    var videoFetchData = await youtube.Fetch(cancellationToken: _cts.Token);
+
+                    if (videoFetchData.ResultType == YoutubeDLSharp.Metadata.MetadataType.Video) 
+                    {
+                        var uri = new Uri(_videoOptions.YoutubeUrl);
+
+                        var playlistId = HttpUtility.ParseQueryString(uri.Query).Get("list");
+
+                        if (playlistId != null) 
+                        {
+                            var url = YoutubeService.GetPlaylistUrlFromId(playlistId);
+
+                            var playlistFetchData = await youtube.Fetch(url, cancellationToken: _cts.Token);
+
+                            CurrentTitleLabel.Content = playlistFetchData.Title;
+                            CurrentTitleLabel.Visibility = Visibility.Visible;
+                        }
+                    }
+
+                    if (videoFetchData.ResultType == YoutubeDLSharp.Metadata.MetadataType.Playlist)
+                    {
+                        CurrentTitleLabel.Content = videoFetchData.Title;
+                        CurrentTitleLabel.Visibility = Visibility.Visible;
+                    }
+
+                    DownloadLabel.Content = $"Fetching Playlist Videos...";
+                    var videosIds = await youtube.GetVideoIdsSafe(_cts.Token);
+                    var videosUrlId = videosIds.Select(id => YoutubeService.GetVideoUrlFromId(id)).ToList();
+
+                    var fetchingParallel = videosUrlId.Select(id => youtube.FetchSafe(id, _cts.Token));
 
                     DownloadLabel.Content = $"Fetching Playlist Videos Data...";
                     var videosData = await Task.WhenAll(fetchingParallel);
 
-                    _downloadQueue = videosData.Select(x => new PlaylistVideoTableRowViewModel
+                    _downloadQueue = videosData.Where(x => x != null).Select((x, i) => new PlaylistVideoTableRowViewModel
                     {
-                        Id = YoutubeService.GetUrlFromId(x.ID),
+                        Id = YoutubeService.GetVideoUrlFromId(x.ID),
+                        Index = i + 1,
                         Name = x.Title,
                         Artist = x.Artist ?? x.Creator ?? x.Channel,
                         Status = PlaylistVideoTableRowStatus.InQueue.ToString(),
@@ -240,21 +271,14 @@ namespace Felipe.YoutubeExtractor
 
                     DownloadQueueView.Visibility = Visibility.Visible;
                     DownloadQueueView.ItemsSource = _downloadQueue;
-                    DownloadLabel.Content = $"Downloading Videos...";
+                    DownloadLabel.Content = $"Downloading Videos{(_videoOptions.NormalizeAudio ? " and Normalizing Audio" : "")}...";
+                    DownloadProgressBar.IsIndeterminate = false;
 
-                    var downloadingParallel = videosUrlId.Select(id => RunDownload(id, youtube.Download(id, _cts.Token)));
+                    var processingParallel = _downloadQueue.Select(queue => RunDownloadAndNormalize(queue.Id, youtube));
 
-                    var downloads = await Task.WhenAll(downloadingParallel);
+                    await Task.WhenAll(processingParallel);
 
-                    if (_videoOptions.NormalizeAudio)
-                    {
-                        DownloadLabel.Content = $"Normalizing Audio...";
-                        var normalizingParallel = downloads.Select(filePathAndId => RunNormalize(filePathAndId.Item2, youtube.Normalize(filePathAndId.Item1, _cts.Token)));
-
-                        await Task.WhenAll(normalizingParallel);
-                    }
-
-                    DownloadFinished();
+                    DownloadFinished("Playlist Download Finished.");
 
                     return;
                 }
@@ -278,22 +302,42 @@ namespace Felipe.YoutubeExtractor
 
                 DownloadFinished();
             }
+            catch (AggregateException ex)
+            {
+                var message = ex.Message;
+                var innerException = ex.InnerException;
+
+                if (innerException != null) 
+                {
+                    message = $"{innerException.Message}\n{ex.Message}";
+                }
+
+                CloseOnException(message);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Join("\n", ex.Message), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                Close();
-
-                return;
+                CloseOnException(ex.Message);
             }
         }
 
-        private void DownloadFinished()
+        private void CloseOnException(IEnumerable<string> exceptionMessages)
+        {
+            CloseOnException(string.Join("\n", exceptionMessages));
+        }
+
+        private void CloseOnException(string exceptionMessage)
+        {
+            MessageBox.Show(exceptionMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            Close();
+        }
+
+        private void DownloadFinished(string content = "Download Finished.")
         {
             CancelBtn.IsEnabled = false;
             OkBtn.IsEnabled = true;
             OkBtn.IsDefault = true;
-            DownloadLabel.Content = "Download Finished.";
+            DownloadLabel.Content = content;
             DownloadProgressLabel.Content = "100%";
             DownloadProgressBar.Value = 1;
             DownloadProgressBar.IsIndeterminate = false;
@@ -309,7 +353,6 @@ namespace Felipe.YoutubeExtractor
 
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
-            //DialogResult = true;
             Close();
         }
 
@@ -318,13 +361,15 @@ namespace Felipe.YoutubeExtractor
             _cts.Cancel();
 
             Close();
-            //DialogResult = false;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
             _cts.Cancel();
-            //DialogResult = false;
         }
     }
 }

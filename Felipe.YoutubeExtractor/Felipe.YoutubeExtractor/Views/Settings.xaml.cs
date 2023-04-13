@@ -143,9 +143,9 @@ namespace Felipe.YoutubeExtractor.Views
             }
         }
 
-        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        private async void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            var config = ConfigService.StartupConfig(out _);
+            var (config, _) = await ConfigService.StartupConfig();
 
             config.YtdlpPath = YtDlpFilePathTextBox.Text;
             config.YtdlpPathDefaultFolder = YtDlpDefaultFolderCheckBox.IsChecked ?? true;
@@ -154,7 +154,7 @@ namespace Felipe.YoutubeExtractor.Views
             config.OutputPath = OutputPathTextBox.Text;
             config.OutputPathDefaultFolder = OutputDefaultFolderCheckBox.IsChecked ?? true;
 
-            ConfigService.UpdateConfig(config);
+            await ConfigService.UpdateConfig(config);
 
             MessageBox.Show("Settings saved.", "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
 

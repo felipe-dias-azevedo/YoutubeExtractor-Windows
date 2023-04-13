@@ -10,6 +10,7 @@
     MinHeight="200"
     MaxWidth="600"
     MaxHeight="1200"
+    Closed="Window_Closed"
     Closing="Window_Closing"
     ResizeMode="CanMinimize"
     SizeToContent="WidthAndHeight"
@@ -31,7 +32,7 @@
             <DataGrid
                 Name="DownloadQueueView"
                 Grid.Row="0"
-                MaxHeight="300"
+                MaxHeight="420"
                 Margin="0,0,0,16"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
@@ -46,7 +47,6 @@
                 GridLinesVisibility="All"
                 HeadersVisibility="Column"
                 IsEnabled="True"
-                IsHitTestVisible="False"
                 IsReadOnly="True"
                 IsTabStop="False"
                 RowDetailsVisibilityMode="Collapsed"
@@ -56,19 +56,24 @@
                 Visibility="Collapsed">
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                        Width="5*"
-                        Binding="{Binding Name}"
+                        Width="1*"
+                        Binding="{Binding Index}"
                         DisplayIndex="0"
+                        Header="Id" />
+                    <DataGridTextColumn
+                        Width="7*"
+                        Binding="{Binding Name}"
+                        DisplayIndex="1"
                         Header="Name" />
                     <DataGridTextColumn
-                        Width="3*"
+                        Width="6*"
                         Binding="{Binding Artist}"
-                        DisplayIndex="1"
+                        DisplayIndex="2"
                         Header="Artist" />
                     <DataGridTextColumn
-                        Width="3*"
+                        Width="5*"
                         Binding="{Binding Status}"
-                        DisplayIndex="2"
+                        DisplayIndex="3"
                         Header="Status" />
                 </DataGrid.Columns>
             </DataGrid>

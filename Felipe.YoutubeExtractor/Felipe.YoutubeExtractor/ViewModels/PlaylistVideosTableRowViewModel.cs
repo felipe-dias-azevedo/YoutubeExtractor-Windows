@@ -11,14 +11,16 @@ namespace Felipe.YoutubeExtractor.ViewModels
     {
         public string Id { get; set; }
 
+        public int Index { get; set; }
+
         public string Name { get; set; }
 
         public string Artist { get; set; }
 
-        private PlaylistVideoTableRowStatus _status;
+        public PlaylistVideoTableRowStatus StatusEnum { get; private set; }
         public string Status 
         { 
-            get => _status.ToString().CapitalizedToSpaceJoined(); 
+            get => StatusEnum.ToString().CapitalizedToSpaceJoined(); 
             set  
             {
                 var valid = Enum.TryParse<PlaylistVideoTableRowStatus>(value, out var valueEnum);
@@ -26,7 +28,7 @@ namespace Felipe.YoutubeExtractor.ViewModels
                 {
                     throw new InvalidOperationException($"Value \"{value}\" not a valid option");
                 };
-                _status = valueEnum;
+                StatusEnum = valueEnum;
             }
         }
     }

@@ -50,7 +50,7 @@ namespace Felipe.YoutubeExtractor
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var config = ConfigService.StartupConfig(out var createdConfig);
+            var (config, createdConfig) = await ConfigService.StartupConfig();
 
             AudioFormatComboBox.ItemsSource = Enum.GetValues(typeof(AudioConversionFormat));
 
@@ -72,9 +72,9 @@ namespace Felipe.YoutubeExtractor
             AutoCloseDoneMenuItem.IsChecked = config.AutoCloseWhenDone;
         }
 
-        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        private async void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var config = ConfigService.StartupConfig(out _);
+            var (config, _) = await ConfigService.StartupConfig();
 
             var settings = new Settings(config);
 
@@ -114,7 +114,7 @@ namespace Felipe.YoutubeExtractor
 
         private async void DownloadBtn_Click(object sender, RoutedEventArgs e)
         {
-            var config = ConfigService.StartupConfig(out _);
+            var (config, _) = await ConfigService.StartupConfig();
 
             if (string.IsNullOrEmpty(config.OutputPath) ||
                 string.IsNullOrEmpty(YoutubeUrlTextBox.Text) ||
@@ -165,7 +165,7 @@ namespace Felipe.YoutubeExtractor
                 AutoCloseWhenDone = AutoCloseDoneMenuItem.IsChecked
             };
 
-            ConfigService.UpdateConfig(videoOptions);
+            await ConfigService.UpdateConfig(videoOptions);
 
             var downloadDialog = new DownloadProgress(videoOptionsModel: videoOptions);
             try

@@ -13,11 +13,11 @@ namespace Felipe.YoutubeExtractor
     {
         private static readonly string _path = "config.json";
 
-        public static OptionsModel CreateConfigFile()
+        public static async Task<OptionsModel> CreateConfigFile()
         {
             var options = new OptionsModel();
 
-            WriteConfigFile(options);
+            await WriteConfigFile(options);
 
             return options;
         }
@@ -37,45 +37,50 @@ namespace Felipe.YoutubeExtractor
             return File.Exists(OptionsModel.GetYtDlpDefaultFolder()) || File.Exists(OptionsModel.GetFfmpegDefaultFile());
         }
 
-        public static OptionsModel StartupConfig(out bool createdConfig)
+        public static async Task<(OptionsModel, bool)> StartupConfig()
         {
-            createdConfig = false;
+            var createdConfig = false;
             CreateOutputFolderIfNotExists();
 
             if (!File.Exists(_path))
             {
-                CreateConfigFile();
+                await CreateConfigFile();
 
                 createdConfig = true;
             }
 
-            var configString = File.ReadAllText(_path);
-
-            var config = JsonSerializer.Deserialize<OptionsModel>(configString);
+            var config = await LoadConfig();
 
             if (config == null)
             {
-                createdConfig = true;
-
-                return CreateConfigFile();
+                return (await CreateConfigFile(), true);
             }
+
+            return (config, createdConfig);
+        }
+
+        private static async Task<OptionsModel?> LoadConfig()
+        {
+            var configString = await File.ReadAllTextAsync(_path);
+
+            var config = JsonSerializer.Deserialize<OptionsModel>(configString);
 
             return config;
         }
 
-        private static void WriteConfigFile(OptionsModel options)
+        private static async Task WriteConfigFile(OptionsModel options)
         {
             var serializer = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
 
-            File.WriteAllText(_path, JsonSerializer.Serialize(options, options: serializer));
+            await File.WriteAllTextAsync(_path, JsonSerializer.Serialize(options, options: serializer));
         }
 
-        public static void UpdateConfig(OptionsModel options) 
+        public static async Task UpdateConfig(OptionsModel options) 
         {
-            WriteConfigFile(options);
+            await WriteConfigFile(options);
         }
     }
 }
