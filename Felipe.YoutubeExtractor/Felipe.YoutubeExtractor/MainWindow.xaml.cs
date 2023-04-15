@@ -2,7 +2,6 @@
 using Felipe.YoutubeExtractor.Services;
 using Felipe.YoutubeExtractor.Views;
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;

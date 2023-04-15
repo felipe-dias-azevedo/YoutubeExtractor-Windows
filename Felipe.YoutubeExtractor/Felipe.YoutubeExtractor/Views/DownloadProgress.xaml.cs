@@ -2,7 +2,6 @@
 using Felipe.YoutubeExtractor.Services;
 using Felipe.YoutubeExtractor.ViewModels;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -73,11 +72,7 @@ namespace Felipe.YoutubeExtractor
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n\nDownload them again on settings.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                Close();
-
-                return;
+                CloseOnException(ex.Message + "\n\nDownload them again on settings.");
             }
         }
 
@@ -99,11 +94,7 @@ namespace Felipe.YoutubeExtractor
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                Close();
-
-                return;
+                CloseOnException(ex.Message);
             }
         }
 
@@ -125,11 +116,7 @@ namespace Felipe.YoutubeExtractor
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                Close();
-
-                return;
+                CloseOnException(ex.Message);
             }
         }
 

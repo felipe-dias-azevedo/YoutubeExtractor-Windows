@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Felipe.YoutubeExtractor
 {
@@ -37,7 +32,7 @@ namespace Felipe.YoutubeExtractor
             return File.Exists(OptionsModel.GetYtDlpDefaultFolder()) || File.Exists(OptionsModel.GetFfmpegDefaultFile());
         }
 
-        public static async Task<(OptionsModel, bool)> StartupConfig()
+        public static async Task<(OptionsModel config, bool createdConfig)> StartupConfig()
         {
             var createdConfig = false;
             CreateOutputFolderIfNotExists();
