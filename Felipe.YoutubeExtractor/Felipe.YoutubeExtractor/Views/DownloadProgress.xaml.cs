@@ -340,7 +340,10 @@ namespace Felipe.YoutubeExtractor
             new ToastContentBuilder()
                 .AddText("Download Finished.")
                 .AddText(message)
-                .Show();
+                .Show(t =>
+                {
+                    t.ExpirationTime = DateTime.Now.AddDays(1);
+                });
         }
 
         private void DownloadFinished(string content = "Download Finished.")
