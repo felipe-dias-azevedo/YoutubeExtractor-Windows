@@ -161,7 +161,8 @@ namespace Felipe.YoutubeExtractor
                 IsPlaylist = IsPlaylistCheckBox.IsChecked ?? false,
                 Metadata = MetadataCheckBox.IsChecked ?? true,
                 EmbedThumbnail = ThumbnailCheckBox.IsChecked ?? false,
-                AutoCloseWhenDone = AutoCloseDoneMenuItem.IsChecked
+                AutoCloseWhenDone = AutoCloseDoneMenuItem.IsChecked,
+                EnableNotifications = config.EnableNotifications
             };
 
             await ConfigService.UpdateConfig(videoOptions);

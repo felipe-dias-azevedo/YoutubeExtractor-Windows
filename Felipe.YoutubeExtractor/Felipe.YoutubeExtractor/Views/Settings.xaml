@@ -212,6 +212,17 @@
                     Content="Select..." />
             </Grid>
 
+            <CheckBox
+                Name="EnableNotificationsCheckBox"
+                Margin="0,16,0,8"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Content="Enable Notifications"
+                FontSize="14"
+                IsChecked="True"
+                TabIndex="8"
+                Visibility="Visible" />
+
         </StackPanel>
 
         <Grid DockPanel.Dock="Bottom">

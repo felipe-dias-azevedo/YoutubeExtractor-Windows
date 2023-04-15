@@ -29,7 +29,7 @@ namespace Felipe.YoutubeExtractor
 
         public static bool ShouldAskDownload()
         {
-            return File.Exists(OptionsModel.GetYtDlpDefaultFolder()) || File.Exists(OptionsModel.GetFfmpegDefaultFile());
+            return !File.Exists(OptionsModel.GetYtDlpDefaultFolder()) || !File.Exists(OptionsModel.GetFfmpegDefaultFile());
         }
 
         public static async Task<(OptionsModel config, bool createdConfig)> StartupConfig()

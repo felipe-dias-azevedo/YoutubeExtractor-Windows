@@ -1,9 +1,11 @@
 ﻿using Felipe.YoutubeExtractor.Extensions;
 using Felipe.YoutubeExtractor.Services;
 using Felipe.YoutubeExtractor.ViewModels;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -215,6 +217,8 @@ namespace Felipe.YoutubeExtractor
                     DownloadLabel.Content = $"Fetching Playlist's Data...";
                     var videoFetchData = await youtube.Fetch(cancellationToken: _cts.Token);
 
+                    string? playlistTitle = null;
+
                     if (videoFetchData.ResultType == YoutubeDLSharp.Metadata.MetadataType.Video) 
                     {
                         var uri = new Uri(_videoOptions.YoutubeUrl);
@@ -227,16 +231,18 @@ namespace Felipe.YoutubeExtractor
 
                             var playlistFetchData = await youtube.Fetch(url, cancellationToken: _cts.Token);
 
-                            CurrentTitleLabel.Content = playlistFetchData.Title;
+                            playlistTitle = playlistFetchData.Title;
                             CurrentTitleLabel.Visibility = Visibility.Visible;
                         }
                     }
 
                     if (videoFetchData.ResultType == YoutubeDLSharp.Metadata.MetadataType.Playlist)
                     {
-                        CurrentTitleLabel.Content = videoFetchData.Title;
+                        playlistTitle = videoFetchData.Title;
                         CurrentTitleLabel.Visibility = Visibility.Visible;
                     }
+
+                    CurrentTitleLabel.Content = playlistTitle ?? "";
 
                     DownloadLabel.Content = $"Fetching Playlist Videos...";
                     var videosIds = await youtube.GetVideoIdsSafe(_cts.Token);
@@ -267,6 +273,9 @@ namespace Felipe.YoutubeExtractor
 
                     DownloadFinished("Playlist Download Finished.");
 
+                    if (_videoOptions.EnableNotifications)
+                        ShowNotification(playlistTitle);
+
                     return;
                 }
 
@@ -288,6 +297,9 @@ namespace Felipe.YoutubeExtractor
                 }
 
                 DownloadFinished();
+
+                if (_videoOptions.EnableNotifications)
+                    ShowNotification(videoData.Title);
             }
             catch (AggregateException ex)
             {
@@ -317,6 +329,18 @@ namespace Felipe.YoutubeExtractor
             MessageBox.Show(exceptionMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
             Close();
+        }
+
+        private void ShowNotification(string? file)
+        {
+            var message = file != null 
+                ? $"\"{file}\" {(_videoOptions!.IsPlaylist ? "are" : "is")} done." 
+                : "Download completed sucessfully.";
+
+            new ToastContentBuilder()
+                .AddText("Download Finished.")
+                .AddText(message)
+                .Show();
         }
 
         private void DownloadFinished(string content = "Download Finished.")

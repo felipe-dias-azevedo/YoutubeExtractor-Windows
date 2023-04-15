@@ -28,6 +28,8 @@ namespace Felipe.YoutubeExtractor.Views
             OutputPathTextBox.Text = config.OutputPath;
             OutputDefaultFolderCheckBox.IsChecked = config.OutputPathDefaultFolder;
 
+            EnableNotificationsCheckBox.IsChecked = config.EnableNotifications;
+
             SetUpYtDlpCheckBox();
             SetUpFfmpegCheckBox();
             SetUpOutputCheckBox();
@@ -141,6 +143,7 @@ namespace Felipe.YoutubeExtractor.Views
             config.FfmpegPathDefaultFolder = FfmpegDefaultFolderCheckBox.IsChecked ?? true;
             config.OutputPath = OutputPathTextBox.Text;
             config.OutputPathDefaultFolder = OutputDefaultFolderCheckBox.IsChecked ?? true;
+            config.EnableNotifications = EnableNotificationsCheckBox.IsChecked ?? true;
 
             await ConfigService.UpdateConfig(config);
 
