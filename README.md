@@ -8,3 +8,9 @@ Desktop Tool for downloading videos from youtube with yt-dlp and converting with
 ## Download
 
 - [Build Releases Available](https://github.com/felipe-dias-azevedo/YoutubeExtractor-Windows/releases/)
+
+## Build 
+
+```sh
+dotnet publish -c Release -r win-x64 --output ./out .\Felipe.YoutubeExtractor.sln
+```
