@@ -3,9 +3,11 @@ using Felipe.YoutubeExtractor.Models;
 using Felipe.YoutubeExtractor.ViewModels;
 using Felipe.YoutubeExtractor.Views;
 using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using YoutubeDLSharp;
 
 namespace Felipe.YoutubeExtractor
 {
@@ -58,6 +60,11 @@ namespace Felipe.YoutubeExtractor
                 WHERE YoutubeId = @youtubeId
                 ORDER BY Id;", 
                 new { youtubeId });
+        }
+
+        public async Task Delete()
+        {
+            await _connection.QueryAsync(@"DELETE FROM HistoryModel;");
         }
     }
 }

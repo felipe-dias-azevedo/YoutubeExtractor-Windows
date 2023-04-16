@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YoutubeDLSharp;
 
 namespace Felipe.YoutubeExtractor.Services
 {
@@ -41,7 +42,7 @@ namespace Felipe.YoutubeExtractor.Services
                 DateTime = x.DateTime,
                 HistoryType = x.HistoryType,
                 Artist = x.Artist,
-                YoutubeId= x.YoutubeId
+                YoutubeId = x.YoutubeId
             }).ToList();
         }
 
@@ -58,6 +59,11 @@ namespace Felipe.YoutubeExtractor.Services
                 Artist = x.Artist,
                 YoutubeId = x.YoutubeId
             }).ToList();
+        }
+
+        public async Task Delete()
+        {
+            await _repository.Delete();
         }
     }
 }
