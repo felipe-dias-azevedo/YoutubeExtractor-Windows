@@ -247,7 +247,14 @@ namespace Felipe.YoutubeExtractor
                         CurrentTitleLabel.Visibility = Visibility.Visible;
                     }
 
-                    await _historyService.Insert(_videoOptions.YoutubeUrl, HistoryType.Playlist, title: playlistTitle);
+                    try
+                    {
+                        await _historyService.Insert(_videoOptions.YoutubeUrl, HistoryType.Playlist, title: playlistTitle);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Error on saving history.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
 
                     CurrentTitleLabel.Content = playlistTitle ?? "";
 
@@ -293,7 +300,14 @@ namespace Felipe.YoutubeExtractor
 
                 var videoArtist = videoData.Artist ?? videoData.Creator ?? videoData.Channel;
 
-                await _historyService.Insert(_videoOptions.YoutubeUrl, HistoryType.SingleVideo, title: videoData.Title, artist: videoArtist);
+                try
+                {
+                    await _historyService.Insert(_videoOptions.YoutubeUrl, HistoryType.SingleVideo, title: videoData.Title, artist: videoArtist);
+                }
+                catch
+                {
+                    MessageBox.Show("Error on saving history.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
 
                 CurrentTitleLabel.Content = $"{videoData.Title} ~ {videoArtist}";
                 CurrentTitleLabel.Visibility = Visibility.Visible;

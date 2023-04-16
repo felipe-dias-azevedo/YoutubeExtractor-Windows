@@ -1,13 +1,9 @@
 ﻿using Dapper;
 using Felipe.YoutubeExtractor.Models;
 using Felipe.YoutubeExtractor.ViewModels;
-using Felipe.YoutubeExtractor.Views;
 using Microsoft.Data.Sqlite;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
-using YoutubeDLSharp;
 
 namespace Felipe.YoutubeExtractor
 {
