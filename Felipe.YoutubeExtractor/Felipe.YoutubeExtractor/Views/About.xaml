@@ -38,7 +38,7 @@
                 <Label
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="0,0,0,8"
+                    Margin="0"
                     HorizontalContentAlignment="Left"
                     VerticalContentAlignment="Center"
                     FontFamily="Segoe UI Semilight"
@@ -49,7 +49,7 @@
 
             <Label
                 Grid.Row="1"
-                Margin="0,0,0,4"
+                Margin="0,8,0,4"
                 HorizontalContentAlignment="Left"
                 VerticalContentAlignment="Center"
                 FontSize="14">
@@ -62,7 +62,7 @@
                 VerticalAlignment="Center"
                 FontSize="12"
                 TextAlignment="Center">
-                Version: 1.0.0<LineBreak />
+                Version: 2.2<LineBreak />
                 License: MIT<LineBreak />
                 Author: Felipe Azevedo</TextBlock>
         </Grid>
