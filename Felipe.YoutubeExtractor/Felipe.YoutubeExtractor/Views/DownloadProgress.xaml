@@ -56,6 +56,7 @@
                 RowHeaderWidth="0"
                 SelectionMode="Extended"
                 SelectionUnit="FullRow"
+                TabIndex="3"
                 Visibility="Collapsed">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
@@ -156,7 +157,7 @@
                 VerticalAlignment="Center"
                 Content="Auto close when done"
                 IsChecked="False"
-                TabIndex="8"
+                TabIndex="0"
                 Visibility="Visible" />
         </Grid>
 
@@ -176,7 +177,8 @@
                 Click="OkBtn_Click"
                 Content="OK"
                 IsDefault="False"
-                IsEnabled="False" />
+                IsEnabled="False"
+                TabIndex="1" />
 
             <Button
                 Name="CancelBtn"
@@ -188,7 +190,8 @@
                 VerticalAlignment="Bottom"
                 Click="CancelBtn_Click"
                 Content="Cancel"
-                IsCancel="True" />
+                IsCancel="True"
+                TabIndex="2" />
         </Grid>
     </DockPanel>
 </Window>

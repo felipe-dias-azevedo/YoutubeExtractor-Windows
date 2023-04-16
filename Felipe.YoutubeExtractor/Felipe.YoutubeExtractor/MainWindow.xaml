@@ -68,7 +68,7 @@
                         IsEnabled="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                        TabIndex="2"
+                        TabIndex="0"
                         TextAlignment="Left"
                         TextChanged="YoutubeUrlTextBox_Changed"
                         TextWrapping="NoWrap" />
@@ -83,7 +83,8 @@
                                 HorizontalAlignment="Left"
                                 Content="Options"
                                 FontFamily="Segoe UI Semibold Italic"
-                                FontSize="16" />
+                                FontSize="16"
+                                TabIndex="1" />
                         </DockPanel>
                     </Expander.Header>
 
@@ -111,7 +112,8 @@
                                     Margin="0,0,0,8"
                                     VerticalAlignment="Center"
                                     ItemsSource="{Binding}"
-                                    SelectionChanged="AudioFormatComboBox_Changed">
+                                    SelectionChanged="AudioFormatComboBox_Changed"
+                                    TabIndex="2">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock
@@ -134,7 +136,7 @@
                                 Content="Best Audio Quality"
                                 FontSize="14"
                                 IsChecked="True"
-                                TabIndex="8"
+                                TabIndex="3"
                                 Visibility="Visible" />
                             <CheckBox
                                 Name="MetadataCheckBox"
@@ -144,7 +146,7 @@
                                 Content="Include Metadata"
                                 FontSize="14"
                                 IsChecked="True"
-                                TabIndex="8"
+                                TabIndex="4"
                                 Visibility="Visible" />
                             <CheckBox
                                 Name="ThumbnailCheckBox"
@@ -154,7 +156,7 @@
                                 Content="Include Thumbnail"
                                 FontSize="14"
                                 IsChecked="False"
-                                TabIndex="8"
+                                TabIndex="5"
                                 Visibility="Visible" />
                             <CheckBox
                                 Name="NormalizeAudioCheckBox"
@@ -164,7 +166,7 @@
                                 Content="Normalize Audio"
                                 FontSize="14"
                                 IsChecked="False"
-                                TabIndex="8"
+                                TabIndex="6"
                                 Visibility="Visible" />
                             <CheckBox
                                 Name="IsPlaylistCheckBox"
@@ -175,7 +177,7 @@
                                 FontSize="14"
                                 IsChecked="False"
                                 IsEnabled="False"
-                                TabIndex="8"
+                                TabIndex="7"
                                 Visibility="Visible" />
                         </StackPanel>
 

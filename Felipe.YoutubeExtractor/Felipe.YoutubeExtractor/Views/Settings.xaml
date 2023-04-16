@@ -45,7 +45,7 @@
                     Content="Use Default folder"
                     FontSize="12"
                     IsChecked="True"
-                    TabIndex="8"
+                    TabIndex="0"
                     Visibility="Visible" />
             </Grid>
 
@@ -62,7 +62,8 @@
                     Margin="0,0,8,0"
                     Padding="6"
                     Click="YtDlpDownloadBtn_Click"
-                    Content="Download" />
+                    Content="Download"
+                    TabIndex="1" />
                 <TextBox
                     Name="YtDlpFilePathTextBox"
                     Grid.Column="1"
@@ -74,7 +75,7 @@
                     IsEnabled="True"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    TabIndex="1"
+                    TabIndex="2"
                     TextAlignment="Left"
                     TextWrapping="NoWrap" />
                 <Button
@@ -83,7 +84,8 @@
                     Margin="8,0,0,0"
                     Padding="6"
                     Click="YtDlpFilePathBtn_Click"
-                    Content="Select..." />
+                    Content="Select..."
+                    TabIndex="3" />
             </Grid>
 
             <!--  FFMPEG LOCATION  -->
@@ -112,7 +114,7 @@
                     Content="Use Default folder"
                     FontSize="12"
                     IsChecked="True"
-                    TabIndex="8"
+                    TabIndex="4"
                     Visibility="Visible" />
             </Grid>
             <Grid Margin="0,0,0,24">
@@ -128,7 +130,8 @@
                     Margin="0,0,8,0"
                     Padding="6"
                     Click="FfmpegDownloadBtn_Click"
-                    Content="Download" />
+                    Content="Download"
+                    TabIndex="5" />
                 <TextBox
                     Name="FfmpegFilePathTextBox"
                     Grid.Column="1"
@@ -140,7 +143,7 @@
                     IsEnabled="True"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    TabIndex="2"
+                    TabIndex="6"
                     TextAlignment="Left"
                     TextWrapping="NoWrap" />
                 <Button
@@ -149,7 +152,8 @@
                     Margin="8,0,0,0"
                     Padding="6"
                     Click="FfmpegFilePathBtn_Click"
-                    Content="Select..." />
+                    Content="Select..."
+                    TabIndex="7" />
             </Grid>
 
             <Separator />
@@ -200,7 +204,7 @@
                     IsEnabled="True"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                    TabIndex="2"
+                    TabIndex="9"
                     TextAlignment="Left"
                     TextWrapping="NoWrap" />
                 <Button
@@ -209,7 +213,8 @@
                     Margin="8,0,0,0"
                     Padding="6"
                     Click="OutputPathBtn_Click"
-                    Content="Select..." />
+                    Content="Select..."
+                    TabIndex="10" />
             </Grid>
 
             <CheckBox
@@ -220,7 +225,7 @@
                 Content="Enable Notifications"
                 FontSize="14"
                 IsChecked="True"
-                TabIndex="8"
+                TabIndex="11"
                 Visibility="Visible" />
 
         </StackPanel>
@@ -235,7 +240,7 @@
                 VerticalAlignment="Bottom"
                 Click="SaveBtn_Click"
                 Content="Save"
-                TabIndex="8" />
+                TabIndex="12" />
         </Grid>
     </DockPanel>
 </Window>
