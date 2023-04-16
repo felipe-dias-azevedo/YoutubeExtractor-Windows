@@ -154,12 +154,9 @@ namespace Felipe.YoutubeExtractor
                 return;
             }
 
-            var videoOptions = new VideoOptionsModel
+            var videoOptions = new VideoOptionsModel(config)
             {
-                OutputPath = config.OutputPath,
-                YtdlpPath = config.YtdlpPath,
                 YoutubeUrl = YoutubeUrlTextBox.Text,
-                FfmpegPath = config.FfmpegPath,
                 AudioFormat = (AudioConversionFormat) AudioFormatComboBox.SelectedValue,
                 NormalizeAudio = NormalizeAudioCheckBox.IsChecked ?? false,
                 //DownloadType = ,
@@ -169,7 +166,6 @@ namespace Felipe.YoutubeExtractor
                 Metadata = MetadataCheckBox.IsChecked ?? true,
                 EmbedThumbnail = ThumbnailCheckBox.IsChecked ?? false,
                 AutoCloseWhenDone = AutoCloseDoneMenuItem.IsChecked,
-                EnableNotifications = config.EnableNotifications
             };
 
             await ConfigService.UpdateConfig(videoOptions);
