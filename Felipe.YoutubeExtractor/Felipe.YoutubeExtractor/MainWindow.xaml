@@ -26,6 +26,8 @@
                 <MenuItem Click="ExitMenuItem_Click" Header="_Exit" />
             </MenuItem>
             <MenuItem Header="_Help">
+                <MenuItem Click="HistoryMenuItem_Click" Header="_History" />
+                <Separator />
                 <MenuItem Click="AboutMenuItem_Click" Header="_About" />
             </MenuItem>
         </Menu>

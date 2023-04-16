@@ -1,4 +1,5 @@
 ﻿using Felipe.YoutubeExtractor.Extensions;
+using Felipe.YoutubeExtractor.Models;
 using Felipe.YoutubeExtractor.Services;
 using Felipe.YoutubeExtractor.ViewModels;
 using Microsoft.Toolkit.Uwp.Notifications;
@@ -26,6 +27,8 @@ namespace Felipe.YoutubeExtractor
 
         private List<PlaylistVideoTableRowViewModel> _downloadQueue;
 
+        private readonly HistoryService _historyService;
+
         public DownloadProgress(bool progressVisible = false, string labelContent = "Downloading...")
         {
             _cts = new CancellationTokenSource();
@@ -40,10 +43,12 @@ namespace Felipe.YoutubeExtractor
         {
             _videoOptions = videoOptionsModel;
             _cts = new CancellationTokenSource();
-
+            
             InitializeComponent();
 
             AutoCloseCheckBox.IsChecked = _videoOptions.AutoCloseWhenDone;
+
+            _historyService = new HistoryService();
         }
 
         public async Task StartDependenciesDownload()
@@ -242,6 +247,8 @@ namespace Felipe.YoutubeExtractor
                         CurrentTitleLabel.Visibility = Visibility.Visible;
                     }
 
+                    await _historyService.Insert(_videoOptions.YoutubeUrl, HistoryType.Playlist, title: playlistTitle);
+
                     CurrentTitleLabel.Content = playlistTitle ?? "";
 
                     DownloadLabel.Content = $"Fetching Playlist Videos...";
@@ -263,6 +270,7 @@ namespace Felipe.YoutubeExtractor
                     }).ToList();
 
                     DownloadQueueView.Visibility = Visibility.Visible;
+                    DownloadQueueSeparator.Visibility = Visibility.Hidden;
                     DownloadQueueView.ItemsSource = _downloadQueue;
                     DownloadLabel.Content = $"Downloading Videos{(_videoOptions.NormalizeAudio ? " and Normalizing Audio" : "")}...";
                     DownloadProgressBar.IsIndeterminate = false;
@@ -283,7 +291,11 @@ namespace Felipe.YoutubeExtractor
                 DownloadProgressBar.IsIndeterminate = true;
                 var videoData = await youtube.Fetch(cancellationToken: _cts.Token);
 
-                CurrentTitleLabel.Content = $"{videoData.Title} ~ {videoData.Artist ?? videoData.Creator ?? videoData.Channel}";
+                var videoArtist = videoData.Artist ?? videoData.Creator ?? videoData.Channel;
+
+                await _historyService.Insert(_videoOptions.YoutubeUrl, HistoryType.SingleVideo, title: videoData.Title, artist: videoArtist);
+
+                CurrentTitleLabel.Content = $"{videoData.Title} ~ {videoArtist}";
                 CurrentTitleLabel.Visibility = Visibility.Visible;
 
                 var downloadPath = await youtube.Download(cancellationToken: _cts.Token, progress: progress);

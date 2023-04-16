@@ -22,6 +22,7 @@
             VerticalAlignment="Center"
             DockPanel.Dock="Top">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*" MaxHeight="450" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -32,10 +33,12 @@
             <DataGrid
                 Name="DownloadQueueView"
                 Grid.Row="0"
-                MaxHeight="420"
-                Margin="0,0,0,16"
+                MaxHeight="450"
+                Margin="0"
                 HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
                 AutoGenerateColumns="False"
                 BorderBrush="Black"
                 BorderThickness="0.5"
@@ -54,6 +57,19 @@
                 SelectionMode="Extended"
                 SelectionUnit="FullRow"
                 Visibility="Collapsed">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Height" Value="30" />
+                        <Setter Property="Background" Value="LightGray" />
+                        <Setter Property="SeparatorVisibility" Value="Visible" />
+                        <Setter Property="SeparatorBrush" Value="Black" />
+                        <Setter Property="BorderBrush" Value="Black" />
+                        <Setter Property="BorderThickness" Value="1,0,0,1" />
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="Padding" Value="8,0,0,0" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="1*"
@@ -78,10 +94,16 @@
                 </DataGrid.Columns>
             </DataGrid>
 
+            <Separator
+                Name="DownloadQueueSeparator"
+                Grid.Row="1"
+                Margin="0,16,0,0"
+                Visibility="Collapsed" />
+
             <Label
                 Name="CurrentTitleLabel"
-                Grid.Row="1"
-                Margin="0,0,0,8"
+                Grid.Row="2"
+                Margin="0,0,0,0"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 Content=""
@@ -90,7 +112,7 @@
                 FontWeight="Medium"
                 Visibility="Collapsed" />
 
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="3" Margin="0,8,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="1*" />
@@ -115,7 +137,7 @@
 
             <ProgressBar
                 x:Name="DownloadProgressBar"
-                Grid.Row="3"
+                Grid.Row="4"
                 Height="16"
                 Margin="0,8,0,8"
                 Padding="6"
@@ -128,7 +150,7 @@
 
             <CheckBox
                 Name="AutoCloseCheckBox"
-                Grid.Row="4"
+                Grid.Row="5"
                 Margin="0,8,0,8"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"

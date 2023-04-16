@@ -85,6 +85,13 @@ namespace Felipe.YoutubeExtractor
             Close();
         }
 
+        private void HistoryMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var history = new History();
+
+            history.ShowDialog();
+        }
+
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var about = new About();

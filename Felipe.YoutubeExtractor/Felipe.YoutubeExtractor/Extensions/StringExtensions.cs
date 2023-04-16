@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Felipe.YoutubeExtractor.Extensions
 {
@@ -8,7 +9,7 @@ namespace Felipe.YoutubeExtractor.Extensions
         {
             var splitted = Regex.Split(text, @"(?<!\s)(?=[A-Z])");
 
-            return string.Join(" ", splitted);
+            return string.Join(" ", splitted.Where(x => !string.IsNullOrEmpty(x)));
         }
 
         public static string RemoveAllWhitespaces(this string text)
