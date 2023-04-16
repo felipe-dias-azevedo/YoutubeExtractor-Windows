@@ -260,16 +260,16 @@ namespace Felipe.YoutubeExtractor
 
                     DownloadLabel.Content = $"Fetching Playlist Videos...";
                     var videosIds = await youtube.GetVideoIdsSafe(_cts.Token);
-                    var videosUrlId = videosIds.Select(id => YoutubeService.GetVideoUrlFromId(id)).ToList();
+                    var videosUrlId = videosIds.DistinctBy(x => x).Select(id => YoutubeService.GetVideoUrlFromId(id)).ToList();
 
                     var fetchingParallel = videosUrlId.Select(id => youtube.FetchSafe(id, _cts.Token));
 
                     DownloadLabel.Content = $"Fetching Playlist Videos Data...";
                     var videosData = await Task.WhenAll(fetchingParallel);
 
-                    _downloadQueue = videosData.Where(x => x != null).Select((x, i) => new PlaylistVideoTableRowViewModel
+                    _downloadQueue = videosData.Where(x => x != null).DistinctBy(x => x!.Title).Select((x, i) => new PlaylistVideoTableRowViewModel
                     {
-                        Id = YoutubeService.GetVideoUrlFromId(x.ID),
+                        Id = YoutubeService.GetVideoUrlFromId(x!.ID),
                         Index = i + 1,
                         Name = x.Title,
                         Artist = x.Artist ?? x.Creator ?? x.Channel,
