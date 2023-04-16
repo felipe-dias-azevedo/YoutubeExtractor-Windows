@@ -216,7 +216,7 @@ namespace Felipe.YoutubeExtractor.Services
             var tempOutputNamePath = Path.Combine(FileService.GetFolderPathFromFilePath(fileExportPath)!, tempOutputName);
             var tempOutputPath = FileService.ConvertExecutable(tempOutputNamePath);
 
-            await ffmpeg.ExecuteAsync($"-y -i {filePath} -movflags use_metadata_tags -map_metadata 0 -filter:a \"volume={volume}\" -q:a 0 {tempOutputPath}", cancellationToken);
+            await ffmpeg.ExecuteAsync($"-y -i {filePath} -movflags use_metadata_tags -map_metadata 0:s:a:0 -filter:a \"volume={volume}\" -q:a 0 -c:v copy {tempOutputPath}", cancellationToken);
 
             File.Delete(fileExportPath);
             File.Move(tempOutputNamePath, fileExportPath);
