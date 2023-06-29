@@ -1,4 +1,4 @@
-# YoutubeExtractor-Windows
+# Youtube Extractor
 
 <p align="center">
   <img width="128" height="128" src=".github/logo.png">

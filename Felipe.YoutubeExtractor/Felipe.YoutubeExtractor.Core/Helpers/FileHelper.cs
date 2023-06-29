@@ -1,9 +1,6 @@
-﻿using System.IO;
-using System.Linq;
-
-namespace Felipe.YoutubeExtractor
+﻿namespace Felipe.YoutubeExtractor.Core.Helpers
 {
-    public static class FileService
+    public static class FileHelper
     {
         public static bool ExistsFile(string path)
         {
@@ -28,7 +25,7 @@ namespace Felipe.YoutubeExtractor
             if (path.Contains("\'"))
             {
                 pathString = path.Replace("\'", "");
-            } 
+            }
             else if (path.Contains("\""))
             {
                 pathString = path.Replace("\"", "");
@@ -39,7 +36,7 @@ namespace Felipe.YoutubeExtractor
 
         public static string ConvertExecutable(string path)
         {
-            if (path.Contains(" ")) 
+            if (path.Contains(" "))
             {
                 return $"\"{path}\"";
             }

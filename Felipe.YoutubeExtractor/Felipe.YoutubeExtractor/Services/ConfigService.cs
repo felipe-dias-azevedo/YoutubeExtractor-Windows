@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using Felipe.YoutubeExtractor.Core.Models;
+using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Felipe.YoutubeExtractor
+namespace Felipe.YoutubeExtractor.Services
 {
     public static class ConfigService
     {
@@ -73,7 +74,7 @@ namespace Felipe.YoutubeExtractor
             await File.WriteAllTextAsync(_path, JsonSerializer.Serialize(options, options: serializer));
         }
 
-        public static async Task UpdateConfig(OptionsModel options) 
+        public static async Task UpdateConfig(OptionsModel options)
         {
             await WriteConfigFile(options);
         }

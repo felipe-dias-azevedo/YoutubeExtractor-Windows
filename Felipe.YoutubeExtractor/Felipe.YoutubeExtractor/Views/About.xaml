@@ -62,7 +62,7 @@
                 VerticalAlignment="Center"
                 FontSize="12"
                 TextAlignment="Center">
-                Version: 2.2<LineBreak />
+                Version: 2.3<LineBreak />
                 License: MIT<LineBreak />
                 Author: Felipe Azevedo</TextBlock>
         </Grid>

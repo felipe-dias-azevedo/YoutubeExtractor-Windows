@@ -1,18 +1,13 @@
-﻿using Felipe.YoutubeExtractor.Extensions;
-using Felipe.YoutubeExtractor.Models;
+﻿using Felipe.YoutubeExtractor.Core.Extensions;
+using Felipe.YoutubeExtractor.Core.Helpers;
+using Felipe.YoutubeExtractor.Core.Models;
 using FFmpeg.NET;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using YoutubeDLSharp;
 using YoutubeDLSharp.Metadata;
 using YoutubeDLSharp.Options;
 
-namespace Felipe.YoutubeExtractor.Services
+namespace Felipe.YoutubeExtractor.Core.Services
 {
     public class YoutubeService
     {
@@ -48,7 +43,7 @@ namespace Felipe.YoutubeExtractor.Services
             return Regex.IsMatch(url, _validYoutubeUrl);
         }
 
-        public async Task<string> Download(string? videoUrl = null, CancellationToken cancellationToken = default, Progress<YoutubeDLSharp.DownloadProgress>? progress = null)
+        public async Task<string> Download(string? videoUrl = null, CancellationToken cancellationToken = default, Progress<DownloadProgress>? progress = null)
         {
             var url = _videoOptions.YoutubeUrl;
 
@@ -71,10 +66,10 @@ namespace Felipe.YoutubeExtractor.Services
 
             //customOptions.AddCustomOption("--paths", _videoOptions.OutputPath);
 
-            var res = await _youtubeDl.RunVideoDownload(url, 
-                ct: cancellationToken, 
-                format: _videoOptions.Format, 
-                progress: progress, 
+            var res = await _youtubeDl.RunVideoDownload(url,
+                ct: cancellationToken,
+                format: _videoOptions.Format,
+                progress: progress,
                 overrideOptions: customOptions);
 
             if (res == null)
@@ -124,7 +119,7 @@ namespace Felipe.YoutubeExtractor.Services
         {
             var (output, error) = await GetId(cancellationToken);
 
-            if (error.Any(x => !string.IsNullOrEmpty(x))) 
+            if (error.Any(x => !string.IsNullOrEmpty(x)))
             {
                 throw new Exception(string.Join("\n", error));
             }
@@ -154,13 +149,13 @@ namespace Felipe.YoutubeExtractor.Services
             }
 
             var res = await _youtubeDl.RunVideoDataFetch(url, ct: cancellationToken/*, flat: !_videoOptions.IsPlaylist*/);
-            
+
             if (res == null)
             {
                 throw new InvalidOperationException("No response from fetching.");
             }
 
-            if (!res.Success) 
+            if (!res.Success)
             {
                 throw new Exception(string.Join("\n", res.ErrorOutput));
             }
@@ -173,11 +168,11 @@ namespace Felipe.YoutubeExtractor.Services
             var ffmpegPath = Path.Combine(_videoOptions.FfmpegPath, OptionsModel.GetFfmpegDefaultFileName());
             var ffmpeg = new Engine(ffmpegPath);
 
-            var filePath = FileService.ConvertExecutable(fileExportPath);
+            var filePath = FileHelper.ConvertExecutable(fileExportPath);
 
             string? volume = null;
 
-            ffmpeg.Data += (sender, e) => 
+            ffmpeg.Data += (sender, e) =>
             {
                 if (e.Data != null && e.Data.Contains("max_volume"))
                 {
@@ -191,7 +186,7 @@ namespace Felipe.YoutubeExtractor.Services
                     if (tempVolume.Contains('+'))
                     {
                         tempVolume = tempVolume.Replace("+", "-");
-                    } 
+                    }
                     else if (tempVolume.Contains('-'))
                     {
                         tempVolume = tempVolume.Replace("-", "");
@@ -213,8 +208,8 @@ namespace Felipe.YoutubeExtractor.Services
             var tempOutputNames = Path.GetFileName(fileExportPath).Split(".");
             tempOutputNames[0] = tempOutputNames[0] + "-normalized";
             var tempOutputName = string.Join(".", tempOutputNames);
-            var tempOutputNamePath = Path.Combine(FileService.GetFolderPathFromFilePath(fileExportPath)!, tempOutputName);
-            var tempOutputPath = FileService.ConvertExecutable(tempOutputNamePath);
+            var tempOutputNamePath = Path.Combine(FileHelper.GetFolderPathFromFilePath(fileExportPath)!, tempOutputName);
+            var tempOutputPath = FileHelper.ConvertExecutable(tempOutputNamePath);
 
             await ffmpeg.ExecuteAsync($"-y -i {filePath} -movflags use_metadata_tags -map_metadata 0 -filter:a \"volume={volume}\" -q:a 0 -c:v copy {tempOutputPath}", cancellationToken);
 

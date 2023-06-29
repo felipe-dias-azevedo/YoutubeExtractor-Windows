@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using Felipe.YoutubeExtractor.Core.Helpers;
+using Felipe.YoutubeExtractor.Core.Models;
+using Felipe.YoutubeExtractor.Services;
+using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Linq;
@@ -85,7 +88,7 @@ namespace Felipe.YoutubeExtractor.Views
 
         private void YtDlpFilePathBtn_Click(object sender, RoutedEventArgs e)
         {
-            var initialDirectory = FileService.GetFolderPathFromFilePath(YtDlpFilePathTextBox.Text);
+            var initialDirectory = FileHelper.GetFolderPathFromFilePath(YtDlpFilePathTextBox.Text);
 
             var openFileDialog = new OpenFileDialog
             {

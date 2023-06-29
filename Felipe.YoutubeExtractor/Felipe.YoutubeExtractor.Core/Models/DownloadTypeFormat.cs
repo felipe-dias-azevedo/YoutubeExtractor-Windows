@@ -1,4 +1,4 @@
-﻿namespace Felipe.YoutubeExtractor.Models
+﻿namespace Felipe.YoutubeExtractor.Core.Models
 {
     public enum DownloadTypeFormat
     {

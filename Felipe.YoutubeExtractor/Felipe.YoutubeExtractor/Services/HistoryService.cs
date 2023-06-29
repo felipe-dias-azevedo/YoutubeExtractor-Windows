@@ -1,4 +1,5 @@
 ﻿using Felipe.YoutubeExtractor.Models;
+using Felipe.YoutubeExtractor.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

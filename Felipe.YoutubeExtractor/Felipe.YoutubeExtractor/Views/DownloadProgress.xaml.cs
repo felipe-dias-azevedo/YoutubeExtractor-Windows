@@ -1,4 +1,7 @@
-﻿using Felipe.YoutubeExtractor.Extensions;
+﻿using Felipe.YoutubeExtractor.Core.Extensions;
+using Felipe.YoutubeExtractor.Core.Models;
+using Felipe.YoutubeExtractor.Core.Services;
+using Felipe.YoutubeExtractor.Extensions;
 using Felipe.YoutubeExtractor.Models;
 using Felipe.YoutubeExtractor.Services;
 using Felipe.YoutubeExtractor.ViewModels;
@@ -6,7 +9,6 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;

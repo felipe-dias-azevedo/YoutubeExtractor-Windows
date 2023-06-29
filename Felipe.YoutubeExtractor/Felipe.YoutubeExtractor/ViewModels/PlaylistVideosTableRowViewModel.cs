@@ -1,4 +1,5 @@
-﻿using Felipe.YoutubeExtractor.Extensions;
+﻿using Felipe.YoutubeExtractor.Core.Extensions;
+using Felipe.YoutubeExtractor.Extensions;
 using System;
 
 namespace Felipe.YoutubeExtractor.ViewModels

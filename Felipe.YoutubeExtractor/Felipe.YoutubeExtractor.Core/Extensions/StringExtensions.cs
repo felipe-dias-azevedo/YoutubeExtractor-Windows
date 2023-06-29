@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace Felipe.YoutubeExtractor.Extensions
+namespace Felipe.YoutubeExtractor.Core.Extensions
 {
     public static class StringExtensions
     {

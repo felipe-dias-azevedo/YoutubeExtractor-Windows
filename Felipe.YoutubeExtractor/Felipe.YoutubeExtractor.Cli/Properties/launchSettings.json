@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Felipe.YoutubeExtractor.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "--url \"OK\""
+    }
+  }
+}

@@ -1,13 +1,11 @@
-﻿using Felipe.YoutubeExtractor.Models;
-using System.IO;
-using YoutubeDLSharp.Options;
+﻿using YoutubeDLSharp.Options;
 
-namespace Felipe.YoutubeExtractor
+namespace Felipe.YoutubeExtractor.Core.Models
 {
     public class OptionsModel
     {
         private string _ytdlpPath;
-        public string YtdlpPath 
+        public string YtdlpPath
         {
             get => YtdlpPathDefaultFolder
                 ? GetYtDlpDefaultFolder()
@@ -17,9 +15,9 @@ namespace Felipe.YoutubeExtractor
         public bool YtdlpPathDefaultFolder { get; set; } = true;
 
         private string _ffmpegPath;
-        public string FfmpegPath 
-        { 
-            get => FfmpegPathDefaultFolder 
+        public string FfmpegPath
+        {
+            get => FfmpegPathDefaultFolder
                 ? GetFfmpegDefaultFolder()
                 : _ffmpegPath;
             set => _ffmpegPath = value;
@@ -27,12 +25,12 @@ namespace Felipe.YoutubeExtractor
         public bool FfmpegPathDefaultFolder { get; set; } = true;
 
         private string _outputPath;
-        public string OutputPath 
-        { 
-            get => OutputPathDefaultFolder 
+        public string OutputPath
+        {
+            get => OutputPathDefaultFolder
                 ? GetOutputDefaultFolder()
                 : _outputPath;
-            set => _outputPath = value; 
+            set => _outputPath = value;
         }
         public bool OutputPathDefaultFolder { get; set; } = true;
 

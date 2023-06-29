@@ -5,7 +5,7 @@ using Microsoft.Data.Sqlite;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Felipe.YoutubeExtractor
+namespace Felipe.YoutubeExtractor.Repositories
 {
     public class HistoryRepository
     {
@@ -54,7 +54,7 @@ namespace Felipe.YoutubeExtractor
             return await _connection.QueryAsync<HistoryViewModel>(@"SELECT Id, HistoryType, YoutubeId, Title, Artist, DateTime 
                 FROM HistoryModel 
                 WHERE YoutubeId = @youtubeId
-                ORDER BY Id;", 
+                ORDER BY Id;",
                 new { youtubeId });
         }
 

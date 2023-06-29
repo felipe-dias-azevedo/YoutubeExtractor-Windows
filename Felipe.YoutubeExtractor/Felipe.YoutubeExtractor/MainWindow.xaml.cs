@@ -1,4 +1,8 @@
-﻿using Felipe.YoutubeExtractor.Extensions;
+﻿using Felipe.YoutubeExtractor.Core.Extensions;
+using Felipe.YoutubeExtractor.Core.Helpers;
+using Felipe.YoutubeExtractor.Core.Models;
+using Felipe.YoutubeExtractor.Core.Services;
+using Felipe.YoutubeExtractor.Extensions;
 using Felipe.YoutubeExtractor.Services;
 using Felipe.YoutubeExtractor.Views;
 using System;
@@ -131,13 +135,13 @@ namespace Felipe.YoutubeExtractor
                 return;
             }
 
-            if (!FileService.ExistsFile(config.YtdlpPath))
+            if (!FileHelper.ExistsFile(config.YtdlpPath))
             {
                 MessageBox.Show("yt-dlp executable not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (!FileService.ExistsFolder(config.FfmpegPath))
+            if (!FileHelper.ExistsFolder(config.FfmpegPath))
             {
                 MessageBox.Show("ffmpeg folder path does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -148,7 +152,7 @@ namespace Felipe.YoutubeExtractor
                 MessageBox.Show("Youtube URL might not be valid.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
-            if (!FileService.ExistsFolder(config.OutputPath)) 
+            if (!FileHelper.ExistsFolder(config.OutputPath)) 
             {
                 MessageBox.Show("Output folder path does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

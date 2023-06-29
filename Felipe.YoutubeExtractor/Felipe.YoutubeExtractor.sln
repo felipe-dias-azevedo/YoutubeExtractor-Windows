@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Felipe.YoutubeExtractor", "Felipe.YoutubeExtractor\Felipe.YoutubeExtractor.csproj", "{32817B83-8DFD-488A-8106-3C6EAC6C0E95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Felipe.YoutubeExtractor.Core", "Felipe.YoutubeExtractor.Core\Felipe.YoutubeExtractor.Core.csproj", "{4BB2ACA8-7B81-4485-8566-93CAC6E40089}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Felipe.YoutubeExtractor.Cli", "Felipe.YoutubeExtractor.Cli\Felipe.YoutubeExtractor.Cli.csproj", "{3A8C05A7-39DA-4AE8-960C-38E9B8DAC0FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{32817B83-8DFD-488A-8106-3C6EAC6C0E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32817B83-8DFD-488A-8106-3C6EAC6C0E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32817B83-8DFD-488A-8106-3C6EAC6C0E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BB2ACA8-7B81-4485-8566-93CAC6E40089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BB2ACA8-7B81-4485-8566-93CAC6E40089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BB2ACA8-7B81-4485-8566-93CAC6E40089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BB2ACA8-7B81-4485-8566-93CAC6E40089}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A8C05A7-39DA-4AE8-960C-38E9B8DAC0FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A8C05A7-39DA-4AE8-960C-38E9B8DAC0FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A8C05A7-39DA-4AE8-960C-38E9B8DAC0FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A8C05A7-39DA-4AE8-960C-38E9B8DAC0FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
