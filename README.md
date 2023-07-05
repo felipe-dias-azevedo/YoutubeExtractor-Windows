@@ -10,14 +10,54 @@ Desktop Tool for downloading videos from youtube with yt-dlp and converting with
 
 - [Build Releases Available](https://github.com/felipe-dias-azevedo/YoutubeExtractor-Windows/releases/)
 
-## Build 
+## Build
 
-### Dependencies
+#### Dependencies
 
 - [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 
 ### Instructions
 
+#### GUI
+
+- Windows
+
+**GUI is only available on Windows.**
+
 ```sh
-dotnet publish -c Release -r win-x64 --output ./out .\Felipe.YoutubeExtractor.sln
+cd Felipe.YoutubeExtractor
+
+dotnet publish -p:PublishProfile=.\Felipe.YoutubeExtractor\Properties\PublishProfiles\WindowsGui.pubxml
+```
+
+#### CLI
+
+- Windows
+
+```sh
+cd Felipe.YoutubeExtractor
+
+dotnet publish -p:PublishProfile=.\Felipe.YoutubeExtractor.Cli\Properties\PublishProfiles\WindowsCli.pubxml
+```
+
+- Linux
+
+```sh
+cd Felipe.YoutubeExtractor
+
+dotnet publish -p:PublishProfile=./Felipe.YoutubeExtractor.Cli/Properties/PublishProfiles/LinuxCli.pubxml
+```
+
+- MacOS
+
+```sh
+cd Felipe.YoutubeExtractor
+
+dotnet publish -p:PublishProfile=./Felipe.YoutubeExtractor.Cli/Properties/PublishProfiles/MacIntelCli.pubxml
+```
+
+#### All Projects
+
+```sh
+dotnet publish -c Release -r win-x64 --output ./out ./Felipe.YoutubeExtractor.sln
 ```
