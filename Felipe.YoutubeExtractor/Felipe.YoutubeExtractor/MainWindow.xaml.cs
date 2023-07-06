@@ -147,7 +147,7 @@ namespace Felipe.YoutubeExtractor
                 return;
             }
 
-            if (!YoutubeService.IsValidUrl(YoutubeUrlTextBox.Text))
+            if (!YoutubeHelper.IsValidUrl(YoutubeUrlTextBox.Text))
             {
                 MessageBox.Show("Youtube URL might not be valid.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }

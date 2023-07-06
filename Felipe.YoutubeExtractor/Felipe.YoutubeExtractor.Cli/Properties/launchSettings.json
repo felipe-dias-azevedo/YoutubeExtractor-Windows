@@ -1,8 +1,16 @@
 {
   "profiles": {
-    "Felipe.YoutubeExtractor.Cli": {
+    "Download + Normalize": {
       "commandName": "Project",
-      "commandLineArgs": "--url \"OK\""
+      "commandLineArgs": "--url \"https://www.youtube.com/watch?v=7iDfvoqOhD8\" --normalize --verbose"
+    },
+    "Download": {
+      "commandName": "Project",
+      "commandLineArgs": "--url \"https://www.youtube.com/watch?v=7iDfvoqOhD8\" --verbose"
+    },
+    "Error": {
+      "commandName": "Project",
+      "commandLineArgs": ""
     }
   }
 }

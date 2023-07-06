@@ -14,8 +14,6 @@ namespace Felipe.YoutubeExtractor.Core.Services
         private readonly VideoOptionsModel _videoOptions;
         private readonly YoutubeDL _youtubeDl;
 
-        private const string _validYoutubeUrl = @"^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.be)\/.+$";
-
         public YoutubeService(VideoOptionsModel videoOptions)
         {
             _videoOptions = videoOptions;
@@ -36,11 +34,6 @@ namespace Felipe.YoutubeExtractor.Core.Services
         public static string GetPlaylistUrlFromId(string id)
         {
             return $"https://www.youtube.com/playlist?list={id}";
-        }
-
-        public static bool IsValidUrl(string url)
-        {
-            return Regex.IsMatch(url, _validYoutubeUrl);
         }
 
         public async Task<string> Download(string? videoUrl = null, CancellationToken cancellationToken = default, Progress<DownloadProgress>? progress = null)

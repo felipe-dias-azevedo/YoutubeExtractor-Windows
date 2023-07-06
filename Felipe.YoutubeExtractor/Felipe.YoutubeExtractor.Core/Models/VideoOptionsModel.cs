@@ -2,6 +2,11 @@
 {
     public class VideoOptionsModel : OptionsModel
     {
+        public VideoOptionsModel()
+        {
+            
+        }
+        
         public VideoOptionsModel(OptionsModel config)
         {
             OutputPath = config.OutputPath;
